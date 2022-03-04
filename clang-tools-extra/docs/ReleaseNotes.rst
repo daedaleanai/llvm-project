@@ -271,6 +271,9 @@ New checks
 - New :doc:`daedalean-lambda-implicit-capture
   <clang-tidy/checks/daedalean-lambda-implicit-capture>` check.
 
+- New :doc:`daedalean-ternary-operator-must-not-be-used
+  <clang-tidy/checks/daedalean-ternary-operator-must-not-be-used>` check.
+
 - New :doc:`readability-duplicate-include
   <clang-tidy/checks/readability-duplicate-include>` check.
 
