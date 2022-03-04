@@ -226,6 +226,9 @@ New checks
   Checks for various ways that the ``const CharT*`` constructor of
   ``std::basic_string_view`` can be passed a null argument.
 
+- New :doc:`daedalean-comma-operator-must-not-be-used
+  <clang-tidy/checks/daedalean-comma-operator-must-not-be-used>` check.
+
 - New :doc:`bugprone-suspicious-memory-comparison
   <clang-tidy/checks/bugprone-suspicious-memory-comparison>` check.
 

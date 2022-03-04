@@ -138,6 +138,11 @@ extern volatile int ZirconModuleAnchorSource;
 static int LLVM_ATTRIBUTE_UNUSED ZirconModuleAnchorDestination =
     ZirconModuleAnchorSource;
 
+// This anchor is used to force the linker to link the DaedaleanModule.
+extern volatile int DaedaleanModuleAnchorSource;
+static int LLVM_ATTRIBUTE_UNUSED DaedaleanModuleAnchorDestination =
+    DaedaleanModuleAnchorSource;
+
 } // namespace tidy
 } // namespace clang
 
