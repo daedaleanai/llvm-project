@@ -13,6 +13,7 @@
 #include "DerivedClassesCheck.h"
 #include "LambdaReturnTypeCheck.h"
 #include "LambdaImplicitCaptureCheck.h"
+#include "TernaryOperatorMustNotBeUsedCheck.h"
 
 using namespace clang::ast_matchers;
 
@@ -32,6 +33,8 @@ public:
         "daedalean-lambda-return-type");
     CheckFactories.registerCheck<LambdaImplicitCaptureCheck>(
         "daedalean-lambda-implicit-capture");
+    CheckFactories.registerCheck<TernaryOperatorMustNotBeUsedCheck>(
+        "daedalean-ternary-operator-must-not-be-used");
   }
 };
 

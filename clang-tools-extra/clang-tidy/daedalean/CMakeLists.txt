@@ -10,6 +10,7 @@ add_clang_library(clangTidyDaedaleanModule
   DerivedClassesCheck.cpp
   LambdaReturnTypeCheck.cpp
   LambdaImplicitCaptureCheck.cpp
+  TernaryOperatorMustNotBeUsedCheck.cpp
 
   LINK_LIBS
   clangTidy
