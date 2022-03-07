@@ -10,6 +10,11 @@
 #include "../ClangTidyModule.h"
 #include "../ClangTidyModuleRegistry.h"
 #include "CommaOperatorMustNotBeUsedCheck.h"
+<<<<<<< HEAD
+=======
+#include "LambdaImplicitCaptureCheck.h"
+#include "LambdaReturnTypeCheck.h"
+>>>>>>> ab9bb7e9c307... Implicit lambda capture is prohibited
 
 using namespace clang::ast_matchers;
 
@@ -23,6 +28,8 @@ public:
   void addCheckFactories(ClangTidyCheckFactories &CheckFactories) override {
     CheckFactories.registerCheck<CommaOperatorMustNotBeUsedCheck>(
         "daedalean-comma-operator-must-not-be-used");
+    CheckFactories.registerCheck<LambdaImplicitCaptureCheck>(
+        "daedalean-lambda-implicit-capture");
   }
 };
 
