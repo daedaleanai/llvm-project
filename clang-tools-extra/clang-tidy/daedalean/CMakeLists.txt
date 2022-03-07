@@ -9,6 +9,7 @@ add_clang_library(clangTidyDaedaleanModule
   CommaOperatorMustNotBeUsedCheck.cpp
   DerivedClassesCheck.cpp
   LambdaReturnTypeCheck.cpp
+  LambdaImplicitCaptureCheck.cpp
 
   LINK_LIBS
   clangTidy

@@ -259,8 +259,6 @@ New checks
 - New :doc:`daedalean-derived-classes
   <clang-tidy/checks/daedalean-derived-classes>` check.
 
-  FIXME: add release notes.
-
 - New :doc:`daedalean-lambda-return-type
   <clang-tidy/checks/daedalean-lambda-return-type>` check.
 
@@ -269,6 +267,9 @@ New checks
 
   Finds cases where code could use ``data()`` rather than the address of the
   element at index 0 in a container.
+
+- New :doc:`daedalean-lambda-implicit-capture
+  <clang-tidy/checks/daedalean-lambda-implicit-capture>` check.
 
 - New :doc:`readability-duplicate-include
   <clang-tidy/checks/readability-duplicate-include>` check.

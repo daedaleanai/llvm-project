@@ -12,6 +12,7 @@
 #include "CommaOperatorMustNotBeUsedCheck.h"
 #include "DerivedClassesCheck.h"
 #include "LambdaReturnTypeCheck.h"
+#include "LambdaImplicitCaptureCheck.h"
 
 using namespace clang::ast_matchers;
 
@@ -29,6 +30,8 @@ public:
         "daedalean-derived-classes");
     CheckFactories.registerCheck<LambdaReturnTypeCheck>(
         "daedalean-lambda-return-type");
+    CheckFactories.registerCheck<LambdaImplicitCaptureCheck>(
+        "daedalean-lambda-implicit-capture");
   }
 };
 
