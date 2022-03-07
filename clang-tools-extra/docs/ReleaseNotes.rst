@@ -256,6 +256,9 @@ New checks
   Finds usages of ``container.count()`` and ``container.find() == container.end()`` which should
   be replaced by a call to the ``container.contains()`` method introduced in C++20.
 
+- New :doc:`daedalean-lambda-return-type
+  <clang-tidy/checks/daedalean-lambda-return-type>` check.
+
 - New :doc:`readability-container-data-pointer
   <clang-tidy/checks/readability-container-data-pointer>` check.
 
