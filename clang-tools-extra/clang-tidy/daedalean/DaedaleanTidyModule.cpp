@@ -10,6 +10,7 @@
 #include "../ClangTidyModule.h"
 #include "../ClangTidyModuleRegistry.h"
 #include "CommaOperatorMustNotBeUsedCheck.h"
+#include "SwitchStatementCheck.h"
 
 using namespace clang::ast_matchers;
 
@@ -23,6 +24,8 @@ public:
   void addCheckFactories(ClangTidyCheckFactories &CheckFactories) override {
     CheckFactories.registerCheck<CommaOperatorMustNotBeUsedCheck>(
         "daedalean-comma-operator-must-not-be-used");
+    CheckFactories.registerCheck<SwitchStatementCheck>(
+        "daedalean-switch-statement");
   }
 };
 
