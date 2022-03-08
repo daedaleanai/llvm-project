@@ -274,6 +274,9 @@ New checks
 - New :doc:`daedalean-ternary-operator-must-not-be-used
   <clang-tidy/checks/daedalean-ternary-operator-must-not-be-used>` check.
 
+- New :doc:`daedalean-switch-statement
+  <clang-tidy/checks/daedalean-switch-statement>` check.
+
 - New :doc:`readability-duplicate-include
   <clang-tidy/checks/readability-duplicate-include>` check.
 
