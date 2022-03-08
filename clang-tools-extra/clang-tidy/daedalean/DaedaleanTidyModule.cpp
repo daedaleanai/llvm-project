@@ -14,6 +14,7 @@
 #include "LambdaReturnTypeCheck.h"
 #include "LambdaImplicitCaptureCheck.h"
 #include "TernaryOperatorMustNotBeUsedCheck.h"
+#include "SwitchStatementCheck.h"
 
 using namespace clang::ast_matchers;
 
@@ -35,6 +36,8 @@ public:
         "daedalean-lambda-implicit-capture");
     CheckFactories.registerCheck<TernaryOperatorMustNotBeUsedCheck>(
         "daedalean-ternary-operator-must-not-be-used");
+    CheckFactories.registerCheck<SwitchStatementCheck>(
+        "daedalean-switch-statement");
   }
 };
 
