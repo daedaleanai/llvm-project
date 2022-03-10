@@ -1,4 +1,4 @@
-// RUN: %check_clang_tidy %s bugprone-comma-operator-must-not-be-used %t
+// RUN: %check_clang_tidy %s daedalean-comma-operator-must-not-be-used %t
 
 int a = (2, 3);
 // CHECK-MESSAGES: :[[@LINE-1]]:11: warning: Comma operator must not be used [daedalean-comma-operator-must-not-be-used]
