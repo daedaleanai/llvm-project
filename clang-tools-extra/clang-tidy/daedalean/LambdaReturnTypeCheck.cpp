@@ -21,7 +21,6 @@ void LambdaReturnTypeCheck::registerMatchers(MatchFinder *Finder) {
 }
 
 void LambdaReturnTypeCheck::check(const MatchFinder::MatchResult &Result)  {
-  // FIXME: Add callback implementation.
   const auto *MatchedDecl = Result.Nodes.getNodeAs<LambdaExpr>("x");
   if (MatchedDecl->hasExplicitResultType())
     return;
