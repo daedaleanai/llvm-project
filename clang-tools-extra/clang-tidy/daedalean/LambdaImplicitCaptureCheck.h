@@ -15,10 +15,7 @@ namespace clang {
 namespace tidy {
 namespace daedalean {
 
-/// FIXME: Write a short description.
-///
-/// For the user-facing documentation see:
-/// http://clang.llvm.org/extra/clang-tidy/checks/daedalean-lambda-implicit-capture.html
+/// Daedalean CS.R.16 Implicit lambda capture is prohibited
 class LambdaImplicitCaptureCheck : public ClangTidyCheck {
 public:
   LambdaImplicitCaptureCheck(StringRef Name, ClangTidyContext *Context)

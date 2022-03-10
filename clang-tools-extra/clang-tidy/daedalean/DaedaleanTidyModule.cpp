@@ -10,11 +10,7 @@
 #include "../ClangTidyModule.h"
 #include "../ClangTidyModuleRegistry.h"
 #include "CommaOperatorMustNotBeUsedCheck.h"
-<<<<<<< HEAD
-=======
 #include "LambdaImplicitCaptureCheck.h"
-#include "LambdaReturnTypeCheck.h"
->>>>>>> ab9bb7e9c307... Implicit lambda capture is prohibited
 
 using namespace clang::ast_matchers;
 
