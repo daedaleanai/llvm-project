@@ -212,6 +212,8 @@ New checks
 
 - New :doc:`daedalean-ternary-operator-must-not-be-used
   <clang-tidy/checks/daedalean-ternary-operator-must-not-be-used>` check.
+- New :doc:`daedalean-lambda-return-type
+  <clang-tidy/checks/daedalean-lambda-return-type>` check.
 
   FIXME: add release notes.
 
