@@ -212,6 +212,8 @@ New checks
 
 - New :doc:`daedalean-switch-statement
   <clang-tidy/checks/daedalean-switch-statement>` check.
+- New :doc:`daedalean-lambda-return-type
+  <clang-tidy/checks/daedalean-lambda-return-type>` check.
 
   FIXME: add release notes.
 
