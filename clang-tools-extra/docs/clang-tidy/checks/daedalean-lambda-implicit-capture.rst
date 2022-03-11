@@ -3,4 +3,4 @@
 daedalean-lambda-implicit-capture
 =================================
 
-FIXME: Describe what patterns does the check detect and why. Give examples.
+daedalean coding standards forbid implcit capures using [&] or [=]
