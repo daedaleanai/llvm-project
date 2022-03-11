@@ -3,4 +3,4 @@
 daedalean-lambda-implicit-capture
 =================================
 
-daedalean coding standards forbid implcit capures using [&] or [=]
+daedalean coding standards forbid implicit captures using [&] or [=]
