@@ -3,4 +3,4 @@
 daedalean-lambda-return-type
 ============================
 
-FIXME: Describe what patterns does the check detect and why. Give examples.
+Daedalean coding standards require explicit return type specification for non-void lambda functions
