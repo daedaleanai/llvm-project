@@ -215,6 +215,11 @@ New checks
 
   FIXME: add release notes.
 
+- New :doc:`daedalean-lambda-return-type
+  <clang-tidy/checks/daedalean-lambda-return-type>` check.
+
+  FIXME: add release notes.
+
 - New :doc:`readability-suspicious-call-argument
   <clang-tidy/checks/readability-suspicious-call-argument>` check.
 
