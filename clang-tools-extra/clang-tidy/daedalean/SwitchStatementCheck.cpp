@@ -21,7 +21,6 @@ void SwitchStatementCheck::registerMatchers(MatchFinder *Finder) {
 }
 
 void SwitchStatementCheck::check(const MatchFinder::MatchResult &Result) {
-  // FIXME: Add callback implementation.
   const auto *MatchedDecl = Result.Nodes.getNodeAs<SwitchStmt>("x");
 
   for (auto caseStmt = MatchedDecl->getSwitchCaseList(); caseStmt; caseStmt = caseStmt->getNextSwitchCase()) {
