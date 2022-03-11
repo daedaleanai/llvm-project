@@ -3,4 +3,4 @@
 daedalean-ternary-operator-must-not-be-used
 ===========================================
 
-FIXME: Describe what patterns does the check detect and why. Give examples.
+Daedalean coding standards forbids usage of ternary(conditional) operator

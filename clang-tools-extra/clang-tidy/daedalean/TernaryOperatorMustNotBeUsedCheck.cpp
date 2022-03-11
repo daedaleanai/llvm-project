@@ -18,7 +18,6 @@ namespace daedalean {
 
 namespace {
   const internal::VariadicDynCastAllOfMatcher<Stmt, ConditionalOperator> ternaryOperator;
-
 }
 
 void TernaryOperatorMustNotBeUsedCheck::registerMatchers(MatchFinder *Finder) {
@@ -28,7 +27,6 @@ void TernaryOperatorMustNotBeUsedCheck::registerMatchers(MatchFinder *Finder) {
 void TernaryOperatorMustNotBeUsedCheck::check(const MatchFinder::MatchResult &Result) {
   const auto *MatchedDecl = Result.Nodes.getNodeAs<ConditionalOperator>("x");
   diag(MatchedDecl->getBeginLoc(), "Ternary operator must not be used");
-
 }
 
 } // namespace daedalean
