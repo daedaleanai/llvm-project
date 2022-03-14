@@ -11,6 +11,7 @@
 #include "../ClangTidyModuleRegistry.h"
 #include "CommaOperatorMustNotBeUsedCheck.h"
 #include "SwitchStatementCheck.h"
+#include "TernaryOperatorMustNotBeUsedCheck.h"
 #include "LambdaReturnTypeCheck.h"
 
 using namespace clang::ast_matchers;
@@ -27,6 +28,8 @@ public:
         "daedalean-comma-operator-must-not-be-used");
     CheckFactories.registerCheck<SwitchStatementCheck>(
         "daedalean-switch-statement");
+    CheckFactories.registerCheck<TernaryOperatorMustNotBeUsedCheck>(
+        "daedalean-ternary-operator-must-not-be-used");
     CheckFactories.registerCheck<LambdaReturnTypeCheck>(
         "daedalean-lambda-return-type");
   }
