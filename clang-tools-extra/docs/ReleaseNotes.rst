@@ -215,6 +215,9 @@ New checks
 
   FIXME: add release notes.
 
+- New :doc:`daedalean-switch-statement
+  <clang-tidy/checks/daedalean-switch-statement>` check.
+
 - New :doc:`daedalean-ternary-operator-must-not-be-used
   <clang-tidy/checks/daedalean-ternary-operator-must-not-be-used>` check.
 
