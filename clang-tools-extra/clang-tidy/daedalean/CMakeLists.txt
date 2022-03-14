@@ -12,6 +12,7 @@ add_clang_library(clangTidyDaedaleanModule
   SwitchStatementCheck.cpp
   TernaryOperatorMustNotBeUsedCheck.cpp
   LambdaReturnTypeCheck.cpp
+  OperatorOverloadingCheck.cpp
 
   LINK_LIBS
   clangTidy

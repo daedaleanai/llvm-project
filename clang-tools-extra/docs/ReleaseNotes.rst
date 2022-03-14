@@ -231,6 +231,11 @@ New checks
 
   FIXME: add release notes.
 
+- New :doc:`daedalean-operator-overloading
+  <clang-tidy/checks/daedalean-operator-overloading>` check.
+
+  FIXME: add release notes.
+
 - New :doc:`readability-suspicious-call-argument
   <clang-tidy/checks/readability-suspicious-call-argument>` check.
 

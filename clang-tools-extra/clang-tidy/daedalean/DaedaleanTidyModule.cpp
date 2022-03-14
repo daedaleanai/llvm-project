@@ -15,6 +15,7 @@
 #include "SwitchStatementCheck.h"
 #include "TernaryOperatorMustNotBeUsedCheck.h"
 #include "LambdaReturnTypeCheck.h"
+#include "OperatorOverloadingCheck.h"
 
 using namespace clang::ast_matchers;
 
@@ -38,6 +39,8 @@ public:
         "daedalean-ternary-operator-must-not-be-used");
     CheckFactories.registerCheck<LambdaReturnTypeCheck>(
         "daedalean-lambda-return-type");
+    CheckFactories.registerCheck<OperatorOverloadingCheck>(
+        "daedalean-operator-overloading");
   }
 };
 

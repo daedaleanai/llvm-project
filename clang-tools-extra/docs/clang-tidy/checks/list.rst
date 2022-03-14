@@ -172,6 +172,7 @@ Clang-Tidy Checks
    `daedalean-switch-statement <daedalean-switch-statement.html>`_,
    `daedalean-ternary-operator-must-not-be-used <daedalean-ternary-operator-must-not-be-used.html>`_,
    `daedalean-lambda-return-type <daedalean-lambda-return-type.html>`_, "Yes"
+   `daedalean-operator-overloading <daedalean-operator-overloading.html>`_,
    `darwin-avoid-spinlock <darwin-avoid-spinlock.html>`_,
    `darwin-dispatch-once-nonstatic <darwin-dispatch-once-nonstatic.html>`_, "Yes"
    `fuchsia-default-arguments-calls <fuchsia-default-arguments-calls.html>`_,
