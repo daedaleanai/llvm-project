@@ -210,6 +210,11 @@ New checks
   Finds member initializations in the constructor body which can be placed into
   the initialization list instead.
 
+- New :doc:`daedalean-derived-classes
+  <clang-tidy/checks/daedalean-derived-classes>` check.
+
+  FIXME: add release notes.
+
 - New :doc:`daedalean-lambda-implicit-capture
   <clang-tidy/checks/daedalean-lambda-implicit-capture>` check.
 

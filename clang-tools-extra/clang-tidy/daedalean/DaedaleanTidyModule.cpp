@@ -10,6 +10,7 @@
 #include "../ClangTidyModule.h"
 #include "../ClangTidyModuleRegistry.h"
 #include "CommaOperatorMustNotBeUsedCheck.h"
+#include "DerivedClassesCheck.h"
 #include "LambdaImplicitCaptureCheck.h"
 #include "SwitchStatementCheck.h"
 #include "TernaryOperatorMustNotBeUsedCheck.h"
@@ -27,6 +28,8 @@ public:
   void addCheckFactories(ClangTidyCheckFactories &CheckFactories) override {
     CheckFactories.registerCheck<CommaOperatorMustNotBeUsedCheck>(
         "daedalean-comma-operator-must-not-be-used");
+    CheckFactories.registerCheck<DerivedClassesCheck>(
+        "daedalean-derived-classes");
     CheckFactories.registerCheck<LambdaImplicitCaptureCheck>(
         "daedalean-lambda-implicit-capture");
     CheckFactories.registerCheck<SwitchStatementCheck>(
