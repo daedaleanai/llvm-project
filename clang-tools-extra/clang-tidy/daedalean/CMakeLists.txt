@@ -7,6 +7,7 @@ add_clang_library(clangTidyDaedaleanModule
 
   DaedaleanTidyModule.cpp
   CommaOperatorMustNotBeUsedCheck.cpp
+  TernaryOperatorMustNotBeUsedCheck.cpp
   LambdaReturnTypeCheck.cpp
 
   LINK_LIBS
