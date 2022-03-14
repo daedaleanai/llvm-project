@@ -210,8 +210,12 @@ New checks
   Finds member initializations in the constructor body which can be placed into
   the initialization list instead.
 
+- New :doc:`daedalean-switch-statement
+  <clang-tidy/checks/daedalean-switch-statement>` check.
+
 - New :doc:`daedalean-ternary-operator-must-not-be-used
   <clang-tidy/checks/daedalean-ternary-operator-must-not-be-used>` check.
+
 - New :doc:`daedalean-lambda-return-type
   <clang-tidy/checks/daedalean-lambda-return-type>` check.
 
