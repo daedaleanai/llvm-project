@@ -41,7 +41,7 @@ bool isInterface(const CXXRecordDecl *pDecl) {
     }
   }
 
-  return !pDecl->methods().empty();
+  return pDecl->isAbstract();
 }
 
 bool isFinal(const CXXRecordDecl *pDecl) {
@@ -91,6 +91,7 @@ void DerivedClassesCheck::check(const MatchFinder::MatchResult &Result) {
 
   if (isInterface(MatchedDecl)) {
     const auto dtor = MatchedDecl->getDestructor();
+    // 1. Each interface MUST have a virtual default destructor.
     if (!dtor || (dtor->isImplicit() && !dtor->isVirtual())) {
       diag(MatchedDecl->getBraceRange().getBegin(), "Interface must have virtual defaulted destructor");
     } else {
@@ -106,6 +107,7 @@ void DerivedClassesCheck::check(const MatchFinder::MatchResult &Result) {
       }
     }
   } else {
+    // 7. If a class contains at least one non-pure-virtual method other than destructor it MUST be declared final.
     if (!isFinal(MatchedDecl)) {
       diag(MatchedDecl->getLocation(), "Non-interface class must be final");
       diag(MatchedDecl->getLocation(), "Make class final", DiagnosticIDs::Note) << FixItHint::CreateInsertion(MatchedDecl->getLocation(), " final");
@@ -118,11 +120,7 @@ void DerivedClassesCheck::check(const MatchFinder::MatchResult &Result) {
       if (!m->isVirtual()) {
         continue;
       }
-
-      if (m->size_overridden_methods() == 0) {
-        return;
-      }
-
+      // 6. Virtual functions MUST contain exactly one of two specifiers: virtual for new function or final if function overrides method from base class.
       if (!m->hasAttr<FinalAttr>()) {
         diag(m->getLocation(), "Implemented virtual methods must be final");
         if (const auto attr = m->getAttr<OverrideAttr>(); attr) {
@@ -140,6 +138,7 @@ void DerivedClassesCheck::check(const MatchFinder::MatchResult &Result) {
     }
   }
 
+  // 5. All entity names MUST be unique in all inherited interfaces. If two interfaces share the same methods they MUST extend the common base interface.
   for (const auto & m : MatchedDecl->methods()) {
     if (m->isImplicit()) {
       continue;
@@ -169,9 +168,11 @@ void DerivedClassesCheck::check(const MatchFinder::MatchResult &Result) {
   }
 
   for (const auto base : MatchedDecl->bases()) {
+    // 2. Inheritance from base class with non-pure-virtual methods other than destructor and/or data members is forbidden.
     if (!isInterface(base.getType()->getAsCXXRecordDecl())) {
       diag(base.getBeginLoc(), "Inheritance from non-interface type is forbidden");
     } else {
+      // 3. Public inheritance MUST be used to implement interfaces.
       if (base.getAccessSpecifier() == AS_public) {
         continue;
       }
@@ -183,7 +184,7 @@ void DerivedClassesCheck::check(const MatchFinder::MatchResult &Result) {
 
   std::unordered_map<std::string, std::set<BaseRef>> baseReferences;
   walkBases(MatchedDecl, baseReferences);
-
+  // 4. Base class MUST be declared virtual if it is in diamond inheritance.
   for (const auto [base, derived]: baseReferences) {
     if (derived.size() <= 1) {
       continue;

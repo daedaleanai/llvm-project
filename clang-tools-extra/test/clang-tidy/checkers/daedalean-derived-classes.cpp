@@ -98,6 +98,8 @@ public:
 class S1 {
   // CHECK-MESSAGES: :[[@LINE-1]]:7: warning: Non-interface class must be final [daedalean-derived-classes]
   virtual void foo() {}
+  // CHECK-MESSAGES: :[[@LINE-1]]:16: warning: Implemented virtual methods must be final  [daedalean-derived-classes]
+  // CHECK-FIXES: final
 };
 
 class S2 {
