@@ -277,6 +277,9 @@ New checks
 - New :doc:`daedalean-switch-statement
   <clang-tidy/checks/daedalean-switch-statement>` check.
 
+- New :doc:`daedalean-operator-overloading
+  <clang-tidy/checks/daedalean-operator-overloading>` check.
+
 - New :doc:`readability-duplicate-include
   <clang-tidy/checks/readability-duplicate-include>` check.
 
