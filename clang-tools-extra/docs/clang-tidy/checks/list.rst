@@ -168,6 +168,7 @@ Clang-Tidy Checks
    `cppcoreguidelines-special-member-functions <cppcoreguidelines-special-member-functions.html>`_,
    `daedalean-comma-operator-must-not-be-used <daedalean-comma-operator-must-not-be-used.html>`_,
    `daedalean-lambda-implicit-capture <daedalean-lambda-implicit-capture.html>`_,
+   `daedalean-ternary-operator-must-not-be-used <daedalean-ternary-operator-must-not-be-used.html>`_,
    `daedalean-lambda-return-type <daedalean-lambda-return-type.html>`_, "Yes"
    `darwin-avoid-spinlock <darwin-avoid-spinlock.html>`_,
    `darwin-dispatch-once-nonstatic <darwin-dispatch-once-nonstatic.html>`_, "Yes"
