@@ -9,6 +9,7 @@
 #include "../ClangTidy.h"
 #include "../ClangTidyModule.h"
 #include "../ClangTidyModuleRegistry.h"
+#include "AssignmentOperatorsCheck.h"
 #include "CommaOperatorMustNotBeUsedCheck.h"
 #include "DerivedClassesCheck.h"
 #include "LambdaReturnTypeCheck.h"
@@ -28,6 +29,8 @@ namespace daedalean {
 class DaedaleanModule : public ClangTidyModule {
 public:
   void addCheckFactories(ClangTidyCheckFactories &CheckFactories) override {
+    CheckFactories.registerCheck<AssignmentOperatorsCheck>(
+        "daedalean-assignment-operators");
     CheckFactories.registerCheck<CommaOperatorMustNotBeUsedCheck>(
         "daedalean-comma-operator-must-not-be-used");
     CheckFactories.registerCheck<DerivedClassesCheck>(
