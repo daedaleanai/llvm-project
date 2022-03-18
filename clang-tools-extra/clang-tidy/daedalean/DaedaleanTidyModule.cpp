@@ -12,6 +12,8 @@
 #include "CommaOperatorMustNotBeUsedCheck.h"
 #include "DerivedClassesCheck.h"
 #include "LambdaImplicitCaptureCheck.h"
+#include "ProtectedMustNotBeUsedCheck.h"
+#include "StructsAndClassesCheck.h"
 #include "SwitchStatementCheck.h"
 #include "TernaryOperatorMustNotBeUsedCheck.h"
 #include "LambdaReturnTypeCheck.h"
@@ -33,6 +35,10 @@ public:
         "daedalean-derived-classes");
     CheckFactories.registerCheck<LambdaImplicitCaptureCheck>(
         "daedalean-lambda-implicit-capture");
+    CheckFactories.registerCheck<ProtectedMustNotBeUsedCheck>(
+        "daedalean-protected-must-not-be-used");
+    CheckFactories.registerCheck<StructsAndClassesCheck>(
+        "daedalean-structs-and-classes");
     CheckFactories.registerCheck<SwitchStatementCheck>(
         "daedalean-switch-statement");
     CheckFactories.registerCheck<TernaryOperatorMustNotBeUsedCheck>(
