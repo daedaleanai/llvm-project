@@ -19,7 +19,7 @@ namespace daedalean {
 namespace  {
 AST_MATCHER(FunctionDecl, isOverloadedOperator) {
   if (const auto *CXXMethodNode = dyn_cast<CXXMethodDecl>(&Node)) {
-    if (CXXMethodNode->getParent()->isLambda())
+    if (CXXMethodNode->isImplicit())
       return false;
   }
   return Node.isOverloadedOperator();
