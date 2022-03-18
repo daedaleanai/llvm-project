@@ -171,6 +171,7 @@ Clang-Tidy Checks
    `cppcoreguidelines-slicing <cppcoreguidelines-slicing.html>`_,
    `cppcoreguidelines-special-member-functions <cppcoreguidelines-special-member-functions.html>`_,
    `cppcoreguidelines-virtual-class-destructor <cppcoreguidelines-virtual-class-destructor.html>`_, "Yes"
+   `daedalean-assignment-operators <daedalean-assignment-operators.html>`_,
    `daedalean-derived-classes <daedalean-derived-classes.html>`_, "Yes"
    `daedalean-comma-operator-must-not-be-used <daedalean-comma-operator-must-not-be-used.html>`_,
    `daedalean-lambda-return-type <daedalean-lambda-return-type.html>`_, "Yes"
