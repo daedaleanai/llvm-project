@@ -8,7 +8,6 @@ Daedalean coding standards for operator overloading
  - Unary operator & MUST not be overloaded.
  - If operator[] overloaded with non-const version, const version MUST be present.
  - Assignment operators MUST return reference to self.
- - Assignment operators MUST check if self-assignment takes place.
  - When comparison operators overloaded, set of operators MUST be complete:
    - If == overloaded, != MUST be overloaded as well
    - If < overloaded, > MUST be overloaded as well

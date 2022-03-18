@@ -195,6 +195,7 @@ void OperatorOverloadingCheck::checkReturnSelf(const Stmt *stmt) {
       checkReturnSelf(s);
     }
   }
+
   if (const auto ptr = llvm::dyn_cast<ReturnStmt>(stmt); ptr) {
     const auto expr = ptr->getRetValue();
     if (const auto uOp = llvm::dyn_cast<UnaryOperator>(expr); uOp) {
@@ -204,6 +205,7 @@ void OperatorOverloadingCheck::checkReturnSelf(const Stmt *stmt) {
     } else {
       diag(ptr->getBeginLoc(), "Assignment operator must return reference to this");
     }
+    // If there is no return at all compiler will generate warning/error
   }
 
 }
