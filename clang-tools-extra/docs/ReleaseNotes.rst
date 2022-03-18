@@ -271,6 +271,15 @@ New checks
 - New :doc:`daedalean-lambda-implicit-capture
   <clang-tidy/checks/daedalean-lambda-implicit-capture>` check.
 
+- New :doc:`daedalean-protected-must-not-be-used
+  <clang-tidy/checks/daedalean-protected-must-not-be-used>` check.
+
+- New :doc:`daedalean-structs-and-classes
+  <clang-tidy/checks/daedalean-structs-and-classes>` check.
+
+- New :doc:`daedalean-switch-statement
+  <clang-tidy/checks/daedalean-switch-statement>` check.
+
 - New :doc:`daedalean-ternary-operator-must-not-be-used
   <clang-tidy/checks/daedalean-ternary-operator-must-not-be-used>` check.
 

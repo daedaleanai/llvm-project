@@ -11,6 +11,8 @@ add_clang_library(clangTidyDaedaleanModule
   LambdaReturnTypeCheck.cpp
   LambdaImplicitCaptureCheck.cpp
   TernaryOperatorMustNotBeUsedCheck.cpp
+  StructsAndClassesCheck.cpp
+  ProtectedMustNotBeUsedCheck.cpp
   SwitchStatementCheck.cpp
 
   LINK_LIBS

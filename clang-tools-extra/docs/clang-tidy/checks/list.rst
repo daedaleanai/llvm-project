@@ -175,6 +175,9 @@ Clang-Tidy Checks
    `daedalean-comma-operator-must-not-be-used <daedalean-comma-operator-must-not-be-used.html>`_,
    `daedalean-lambda-return-type <daedalean-lambda-return-type.html>`_, "Yes"
    `daedalean-lambda-implicit-capture <daedalean-lambda-implicit-capture.html>`_,
+   `daedalean-protected-must-not-be-used <daedalean-protected-must-not-be-used.html>`_,
+   `daedalean-structs-and-classes <daedalean-structs-and-classes.html>`_, "Yes"
+   `daedalean-switch-statement <daedalean-switch-statement.html>`_,
    `daedalean-ternary-operator-must-not-be-used <daedalean-ternary-operator-must-not-be-used.html>`_,
    `daedalean-switch-statement <daedalean-switch-statement.html>`_,
    `darwin-avoid-spinlock <darwin-avoid-spinlock.html>`_,
