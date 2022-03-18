@@ -14,6 +14,8 @@
 #include "LambdaReturnTypeCheck.h"
 #include "LambdaImplicitCaptureCheck.h"
 #include "TernaryOperatorMustNotBeUsedCheck.h"
+#include "ProtectedMustNotBeUsedCheck.h"
+#include "StructsAndClassesCheck.h"
 #include "SwitchStatementCheck.h"
 
 using namespace clang::ast_matchers;
@@ -34,6 +36,12 @@ public:
         "daedalean-lambda-return-type");
     CheckFactories.registerCheck<LambdaImplicitCaptureCheck>(
         "daedalean-lambda-implicit-capture");
+    CheckFactories.registerCheck<ProtectedMustNotBeUsedCheck>(
+        "daedalean-protected-must-not-be-used");
+    CheckFactories.registerCheck<StructsAndClassesCheck>(
+        "daedalean-structs-and-classes");
+    CheckFactories.registerCheck<SwitchStatementCheck>(
+        "daedalean-switch-statement");
     CheckFactories.registerCheck<TernaryOperatorMustNotBeUsedCheck>(
         "daedalean-ternary-operator-must-not-be-used");
     CheckFactories.registerCheck<SwitchStatementCheck>(
