@@ -27,6 +27,10 @@ void AssignmentOperatorsCheck::check(const MatchFinder::MatchResult &Result) {
     return;
   }
 
+  if (MatchedDecl->isStruct()) {
+    return;
+  }
+
   bool hasCopy = false;
   bool hasMove = false;
 

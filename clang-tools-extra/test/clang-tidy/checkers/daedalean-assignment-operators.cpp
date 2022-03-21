@@ -43,3 +43,7 @@ public:
   C7 & operator=(const C7&) = delete;
   C7 & operator=(C7&&) = delete;
 };
+
+struct S {
+
+};
