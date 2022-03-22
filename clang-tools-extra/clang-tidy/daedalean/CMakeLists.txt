@@ -10,6 +10,7 @@ add_clang_library(clangTidyDaedaleanModule
   CommaOperatorMustNotBeUsedCheck.cpp
   DerivedClassesCheck.cpp
   EnumClassCheck.cpp
+  FloatingPointComparisonCheck.cpp
   LambdaImplicitCaptureCheck.cpp
   StructsAndClassesCheck.cpp
   ProtectedMustNotBeUsedCheck.cpp
