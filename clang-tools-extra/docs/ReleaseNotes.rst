@@ -274,6 +274,11 @@ New checks
 - New :doc:`daedalean-enum-class
   <clang-tidy/checks/daedalean-enum-class>` check.
 
+- New :doc:`daedalean-floating-point-comparison
+  <clang-tidy/checks/daedalean-floating-point-comparison>` check.
+
+  FIXME: add release notes.
+
 - New :doc:`daedalean-lambda-implicit-capture
   <clang-tidy/checks/daedalean-lambda-implicit-capture>` check.
 
