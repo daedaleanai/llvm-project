@@ -168,7 +168,7 @@ Clang-Tidy Checks
    `cppcoreguidelines-special-member-functions <cppcoreguidelines-special-member-functions.html>`_,
    `daedalean-assignment-operators <daedalean-assignment-operators.html>`_,
    `daedalean-derived-classes <daedalean-derived-classes.html>`_, "Yes"
-   `daedalean-comma-operator-must-not-be-used <daedalean-comma-operator-must-not-be-used.html>`_,
+   `daedalean-enum-class <daedalean-enum-class.html>`_, "Yes"
    `daedalean-lambda-implicit-capture <daedalean-lambda-implicit-capture.html>`_,
    `daedalean-protected-must-not-be-used <daedalean-protected-must-not-be-used.html>`_,
    `daedalean-structs-and-classes <daedalean-structs-and-classes.html>`_, "Yes"

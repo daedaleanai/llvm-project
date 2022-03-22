@@ -218,6 +218,9 @@ New checks
 
   FIXME: add release notes.
 
+- New :doc:`daedalean-enum-class
+  <clang-tidy/checks/daedalean-enum-class>` check.
+
 - New :doc:`daedalean-lambda-implicit-capture
   <clang-tidy/checks/daedalean-lambda-implicit-capture>` check.
 
