@@ -271,6 +271,9 @@ New checks
   Finds cases where code could use ``data()`` rather than the address of the
   element at index 0 in a container.
 
+- New :doc:`daedalean-enum-class
+  <clang-tidy/checks/daedalean-enum-class>` check.
+
 - New :doc:`daedalean-lambda-implicit-capture
   <clang-tidy/checks/daedalean-lambda-implicit-capture>` check.
 
