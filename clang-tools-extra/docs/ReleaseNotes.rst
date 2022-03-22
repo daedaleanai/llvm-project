@@ -178,6 +178,9 @@ New checks
   Finds inner loops that have not been unrolled, as well as fully unrolled
   loops with unknown loops bounds or a large number of iterations.
 
+- New :doc:`daedalean-assignment-operators
+  <clang-tidy/checks/daedalean-assignment-operators>` check.
+
 - New :doc:`daedalean-comma-operator-must-not-be-used
   <clang-tidy/checks/daedalean-comma-operator-must-not-be-used>` check.
 
