@@ -14,6 +14,7 @@
 #include "DerivedClassesCheck.h"
 #include "LambdaReturnTypeCheck.h"
 #include "EnumClassCheck.h"
+#include "FloatingPointComparisonCheck.h"
 #include "LambdaImplicitCaptureCheck.h"
 #include "TernaryOperatorMustNotBeUsedCheck.h"
 #include "ProtectedMustNotBeUsedCheck.h"
@@ -40,6 +41,8 @@ public:
         "daedalean-lambda-return-type");
     CheckFactories.registerCheck<EnumClassCheck>(
         "daedalean-enum-class");
+    CheckFactories.registerCheck<FloatingPointComparisonCheck>(
+        "daedalean-floating-point-comparison");
     CheckFactories.registerCheck<LambdaImplicitCaptureCheck>(
         "daedalean-lambda-implicit-capture");
     CheckFactories.registerCheck<ProtectedMustNotBeUsedCheck>(
