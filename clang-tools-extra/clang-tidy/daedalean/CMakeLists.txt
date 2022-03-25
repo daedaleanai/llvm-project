@@ -11,6 +11,7 @@ add_clang_library(clangTidyDaedaleanModule
   DerivedClassesCheck.cpp
   EnumClassCheck.cpp
   FloatingPointComparisonCheck.cpp
+  IncludeOrderCheck.cpp
   LambdaImplicitCaptureCheck.cpp
   StructsAndClassesCheck.cpp
   ProtectedMustNotBeUsedCheck.cpp

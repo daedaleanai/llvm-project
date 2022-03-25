@@ -14,6 +14,7 @@
 #include "DerivedClassesCheck.h"
 #include "EnumClassCheck.h"
 #include "FloatingPointComparisonCheck.h"
+#include "IncludeOrderCheck.h"
 #include "LambdaImplicitCaptureCheck.h"
 #include "ProtectedMustNotBeUsedCheck.h"
 #include "StructsAndClassesCheck.h"
@@ -42,6 +43,8 @@ public:
         "daedalean-enum-class");
     CheckFactories.registerCheck<FloatingPointComparisonCheck>(
         "daedalean-floating-point-comparison");
+    CheckFactories.registerCheck<IncludeOrderCheck>(
+        "daedalean-include-order");
     CheckFactories.registerCheck<LambdaImplicitCaptureCheck>(
         "daedalean-lambda-implicit-capture");
     CheckFactories.registerCheck<ProtectedMustNotBeUsedCheck>(

@@ -50,7 +50,7 @@ def run_test_once(args, extra_args):
 
   file_name_with_extension = assume_file_name or input_file_name
   _, extension = os.path.splitext(file_name_with_extension)
-  if extension not in ['.c', '.hpp', '.m', '.mm']:
+  if extension not in ['.c', '.hpp', '.m', '.mm', '.cc']:
     extension = '.cpp'
   temp_file_name = temp_file_name + extension
 
