@@ -6,6 +6,7 @@ set(LLVM_LINK_COMPONENTS
 add_clang_library(clangTidyDaedaleanModule
 
   AssignmentOperatorsCheck.cpp
+  ClassMethodsCheck.cpp
   DaedaleanTidyModule.cpp
   CommaOperatorMustNotBeUsedCheck.cpp
   DerivedClassesCheck.cpp
