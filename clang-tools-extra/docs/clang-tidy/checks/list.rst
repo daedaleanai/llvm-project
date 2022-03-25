@@ -170,6 +170,7 @@ Clang-Tidy Checks
    `daedalean-comma-operator-must-not-be-used <daedalean-comma-operator-must-not-be-used.html>`_,
    `daedalean-derived-classes <daedalean-derived-classes.html>`_, "Yes"
    `daedalean-enum-class <daedalean-enum-class.html>`_, "Yes"
+   `daedalean-floating-point-comparison <daedalean-floating-point-comparison.html>`_,
    `daedalean-lambda-implicit-capture <daedalean-lambda-implicit-capture.html>`_,
    `daedalean-protected-must-not-be-used <daedalean-protected-must-not-be-used.html>`_,
    `daedalean-structs-and-classes <daedalean-structs-and-classes.html>`_, "Yes"

@@ -13,6 +13,7 @@
 #include "CommaOperatorMustNotBeUsedCheck.h"
 #include "DerivedClassesCheck.h"
 #include "EnumClassCheck.h"
+#include "FloatingPointComparisonCheck.h"
 #include "LambdaImplicitCaptureCheck.h"
 #include "ProtectedMustNotBeUsedCheck.h"
 #include "StructsAndClassesCheck.h"
@@ -39,6 +40,8 @@ public:
         "daedalean-derived-classes");
     CheckFactories.registerCheck<EnumClassCheck>(
         "daedalean-enum-class");
+    CheckFactories.registerCheck<FloatingPointComparisonCheck>(
+        "daedalean-floating-point-comparison");
     CheckFactories.registerCheck<LambdaImplicitCaptureCheck>(
         "daedalean-lambda-implicit-capture");
     CheckFactories.registerCheck<ProtectedMustNotBeUsedCheck>(
