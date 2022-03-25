@@ -178,6 +178,7 @@ Clang-Tidy Checks
    `daedalean-lambda-return-type <daedalean-lambda-return-type.html>`_, "Yes"
    `daedalean-enum-class <daedalean-enum-class.html>`_, "Yes"
    `daedalean-floating-point-comparison <daedalean-floating-point-comparison.html>`_,
+   `daedalean-include-order <daedalean-include-order.html>`_, "Yes"
    `daedalean-lambda-implicit-capture <daedalean-lambda-implicit-capture.html>`_,
    `daedalean-protected-must-not-be-used <daedalean-protected-must-not-be-used.html>`_,
    `daedalean-structs-and-classes <daedalean-structs-and-classes.html>`_, "Yes"
