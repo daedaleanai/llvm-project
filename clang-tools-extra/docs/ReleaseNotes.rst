@@ -279,6 +279,11 @@ New checks
 
   FIXME: add release notes.
 
+- New :doc:`daedalean-include-order
+  <clang-tidy/checks/daedalean-include-order>` check.
+
+  FIXME: add release notes.
+
 - New :doc:`daedalean-lambda-implicit-capture
   <clang-tidy/checks/daedalean-lambda-implicit-capture>` check.
 
