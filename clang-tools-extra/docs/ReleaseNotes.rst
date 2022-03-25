@@ -229,6 +229,9 @@ New checks
 - New :doc:`daedalean-assignment-operators
   <clang-tidy/checks/daedalean-assignment-operators>` check.
 
+- New :doc:`daedalean-class-methods
+  <clang-tidy/checks/daedalean-class-methods>` check.
+
 - New :doc:`daedalean-comma-operator-must-not-be-used
   <clang-tidy/checks/daedalean-comma-operator-must-not-be-used>` check.
 
