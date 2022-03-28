@@ -70,9 +70,18 @@ private:
 
 std::string basename(const std::string & path) {
   if (const size_t pos = path.find_last_of('/'); pos == std::string::npos) {
-    return {};
+    return path;
   } else {
     return path.substr(pos + 1);
+  }
+}
+
+std::string ext(const std::string & path) {
+  const std::string name = basename(path);
+  if (const size_t pos = name.find_last_of("."); pos == std::string::npos) {
+    return "";
+  } else {
+    return name.substr(pos);
   }
 }
 
@@ -102,8 +111,8 @@ void IncludeOrderPPCallbacks::InclusionDirective(
 
   const std::string fileName(FileName);
   const std::string project = fileName.substr(0, fileName.find_first_of('/'));
-  const std::string ext = fileName.substr(fileName.find_last_of('.'));
-  if (ext != ".hh" && ext != ".h") {
+  const std::string fileExt = ext(fileName);
+  if (fileExt != ".hh" && fileExt != ".h") {
     Check.diag(FilenameRange.getBegin(), "Only header files (.h, .hh) should be included");
   }
 
@@ -119,9 +128,9 @@ void IncludeOrderPPCallbacks::InclusionDirective(
 
     const std::string includeBasename = basename(fileName);
     const std::string curFileName = SM.getFileEntryForID(SM.getFileID(HashLoc))->getName().str();
-    std::string curBasename = basename(curFileName);
+    const std::string curBasename = basename(curFileName);
 
-    const std::string curExt = curBasename.substr(curBasename.find_last_of('.'));
+    const std::string curExt = ext(curBasename);
 
     if ((curExt == ".cc" || curExt == ".c") && curBasename.substr(0, curBasename.find_last_of('.')) == includeBasename.substr(0, includeBasename.find_last_of('.'))) {
       groupType = GroupType::RelatedHeader;
