@@ -19,6 +19,7 @@
 #include "IncludeOrderCheck.h"
 #include "LambdaImplicitCaptureCheck.h"
 #include "TernaryOperatorMustNotBeUsedCheck.h"
+#include "PreprocessingDirectivesCheck.h"
 #include "ProtectedMustNotBeUsedCheck.h"
 #include "StructsAndClassesCheck.h"
 #include "SwitchStatementCheck.h"
@@ -51,6 +52,8 @@ public:
         "daedalean-include-order");
     CheckFactories.registerCheck<LambdaImplicitCaptureCheck>(
         "daedalean-lambda-implicit-capture");
+    CheckFactories.registerCheck<PreprocessingDirectivesCheck>(
+        "daedalean-preprocessing-directives");
     CheckFactories.registerCheck<ProtectedMustNotBeUsedCheck>(
         "daedalean-protected-must-not-be-used");
     CheckFactories.registerCheck<StructsAndClassesCheck>(

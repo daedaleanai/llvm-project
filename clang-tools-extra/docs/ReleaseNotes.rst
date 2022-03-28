@@ -290,6 +290,9 @@ New checks
 - New :doc:`daedalean-lambda-implicit-capture
   <clang-tidy/checks/daedalean-lambda-implicit-capture>` check.
 
+- New :doc:`daedalean-preprocessing-directives
+  <clang-tidy/checks/daedalean-preprocessing-directives>` check.
+
 - New :doc:`daedalean-protected-must-not-be-used
   <clang-tidy/checks/daedalean-protected-must-not-be-used>` check.
 
