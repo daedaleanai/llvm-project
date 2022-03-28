@@ -8,7 +8,7 @@ consteval int f1(int i) {
   return i;
 }
 
-consteval constexpr int f2(int i) { 
+consteval constexpr int f2(int i) {
   //expected-error@-1 {{cannot combine}}
   return i;
 }
@@ -195,7 +195,7 @@ auto ptr = ret1(0);
 struct A {
   consteval int f(int) {
     // expected-note@-1+ {{declared here}}
-    return 0;    
+    return 0;
   }
 };
 
@@ -239,7 +239,7 @@ constexpr int f_c(int i) {
   int t = f(i);
 // expected-error@-1 {{is not a constant expression}}
 // expected-note@-2 {{function parameter}}
-  return f(0);  
+  return f(0);
 }
 
 consteval int f_eval(int i) {
@@ -255,7 +255,7 @@ auto l1 = [](int i) constexpr {
   int t = f(i);
 // expected-error@-1 {{is not a constant expression}}
 // expected-note@-2 {{function parameter}}
-  return f(0);  
+  return f(0);
 };
 
 }
@@ -663,3 +663,27 @@ struct A {
   }
 };
 } // PR48235
+
+namespace Issue54578 {
+// We expect the user-defined literal to be resovled entirely at compile time
+// despite being instantiated through a template.
+inline consteval unsigned char operator""_UC(const unsigned long long n) {
+  return static_cast<unsigned char>(n);
+}
+
+inline constexpr char f1(const auto octet) {
+  return 4_UC;
+}
+
+template <typename Ty>
+inline constexpr char f2(const Ty octet) {
+  return 4_UC;
+}
+
+void test() {
+  static_assert(f1('a') == 4);
+  static_assert(f2('a') == 4);
+  constexpr int c = f1('a') + f2('a');
+  static_assert(c == 8);
+}
+}

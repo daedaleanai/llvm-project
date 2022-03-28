@@ -279,6 +279,9 @@ C++20 Feature Support
   macros and is not affected by these changes. The ``<stdatomic.h>`` diagnostic
   can be disabled by defining the ``_CLANG_DISABLE_CRT_DEPRECATION_WARNINGS``
   macro prior to including the header.
+- No longer attempt to evaluate a consteval UDL function call at runtime when
+  it is called through a template instantiation. This fixes
+  `Issue 54578 <https://github.com/llvm/llvm-project/issues/54578>`_.
 
 C++2b Feature Support
 ^^^^^^^^^^^^^^^^^^^^^
