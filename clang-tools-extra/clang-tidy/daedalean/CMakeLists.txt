@@ -16,6 +16,7 @@ add_clang_library(clangTidyDaedaleanModule
   IncludeOrderCheck.cpp
   LambdaImplicitCaptureCheck.cpp
   TernaryOperatorMustNotBeUsedCheck.cpp
+  PreprocessingDirectivesCheck.cpp
   StructsAndClassesCheck.cpp
   ProtectedMustNotBeUsedCheck.cpp
   SwitchStatementCheck.cpp
