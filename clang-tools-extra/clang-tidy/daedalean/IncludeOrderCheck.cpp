@@ -67,6 +67,15 @@ private:
 private:
   void printInverse(const IncludeDirective & what, const IncludeDirective & beforeWhat);
 };
+
+std::string basename(const std::string & path) {
+  if (const size_t pos = path.find_last_of('/'); pos == std::string::npos) {
+    return {};
+  } else {
+    return path.substr(pos + 1);
+  }
+}
+
 } // namespace
 
 void IncludeOrderCheck::registerPPCallbacks(const SourceManager &SM,
@@ -74,6 +83,7 @@ void IncludeOrderCheck::registerPPCallbacks(const SourceManager &SM,
                                             Preprocessor *ModuleExpanderPP) {
   PP->addPPCallbacks(::std::make_unique<IncludeOrderPPCallbacks>(*this, SM));
 }
+
 
 void IncludeOrderPPCallbacks::InclusionDirective(
     SourceLocation HashLoc, const Token &IncludeTok, StringRef FileName,
@@ -100,20 +110,20 @@ void IncludeOrderPPCallbacks::InclusionDirective(
   const std::string currentDir = SM.getFileManager().getCanonicalName(SM.getFileEntryForID(SM.getFileID(HashLoc))->getDir()).str();
   const std::string includeDir = SM.getFileManager().getCanonicalName(File->getDir()).str();
 
-  const size_t prefixSize = includeDir.find(project) + project.length();
+  const size_t prefixSize = includeDir.find(project) + project.length() + 1;
 
   GroupType groupType = GroupType::External;
 
   if (currentDir == includeDir) {
     groupType = GroupType::SameDirectory;
 
-    const std::string includeBasename = fileName.substr(fileName.find_last_of('/')).substr(1);
+    const std::string includeBasename = basename(fileName);
     const std::string curFileName = SM.getFileEntryForID(SM.getFileID(HashLoc))->getName().str();
-    std::string curBasename = curFileName.substr(curFileName.find_last_of('/')).substr(1);
+    std::string curBasename = basename(curFileName);
 
-    const std::string curExt = curFileName.substr(curFileName.find_last_of('.'));
+    const std::string curExt = curBasename.substr(curBasename.find_last_of('.'));
 
-    if ((curExt == ".cc" || curExt == ".c") && curBasename.substr(0, curBasename.find_last_of('.')) == includeBasename.substr(0, curBasename.find_last_of('.'))) {
+    if ((curExt == ".cc" || curExt == ".c") && curBasename.substr(0, curBasename.find_last_of('.')) == includeBasename.substr(0, includeBasename.find_last_of('.'))) {
       groupType = GroupType::RelatedHeader;
     }
 
@@ -162,7 +172,7 @@ void IncludeOrderPPCallbacks::EndOfMainFile() {
             SM.getExpansionLineNumber((it - 1)->Loc) + 1) {
           Check.diag((it - 1)->Range.getBegin(),
                      "<" + (it - 1)->Filename + "> and <" + it->Filename +
-                         "> should be in different groups");
+                         "> should be in different include groups");
         }
       } else {
         if (SM.getExpansionLineNumber(it->Loc) !=
