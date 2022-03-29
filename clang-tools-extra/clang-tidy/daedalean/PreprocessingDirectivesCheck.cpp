@@ -30,7 +30,7 @@ public:
                                PragmaIntroducerKind Introducer) override {
     const auto fileId = SM.getFileID(Loc);
     const auto fileName = SM.getFileEntryForID(fileId)->getName();
-    if (fileName.endswith(".hpp") || fileName.endswith(".h")) {
+    if (fileName.endswith(".hh") || fileName.endswith(".h")) {
       const char *data = SM.getCharacterData(Loc);
       std::string pragmaDeclaration;
 
@@ -136,7 +136,7 @@ public:
     if (Reason == EnterFile && FileType == SrcMgr::C_User) {
       if (const FileEntry *FE = SM.getFileEntryForID(SM.getFileID(Loc))) {
         const auto fileName = FE->getName();
-        if (!fileName.endswith(".hpp") && !fileName.endswith(".h")) {
+        if (!fileName.endswith(".hh") && !fileName.endswith(".h")) {
           return;
         }
 
