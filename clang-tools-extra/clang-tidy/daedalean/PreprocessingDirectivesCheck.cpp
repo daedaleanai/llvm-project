@@ -20,13 +20,6 @@ namespace daedalean {
 
 namespace {
 
-enum class GroupType {
-  RelatedHeader = 0,
-  SameDirectory,
-  SameProject,
-  External
-};
-
 class IncludeOrderPPCallbacks : public PPCallbacks {
 public:
   explicit IncludeOrderPPCallbacks(ClangTidyCheck &Check,
