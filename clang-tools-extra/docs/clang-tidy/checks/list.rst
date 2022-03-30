@@ -174,12 +174,13 @@ Clang-Tidy Checks
    `daedalean-floating-point-comparison <daedalean-floating-point-comparison.html>`_,
    `daedalean-include-order <daedalean-include-order.html>`_, "Yes"
    `daedalean-lambda-implicit-capture <daedalean-lambda-implicit-capture.html>`_,
+   `daedalean-lambda-return-type <daedalean-lambda-return-type.html>`_, "Yes"
+   `daedalean-operator-overloading <daedalean-operator-overloading.html>`_,
+   `daedalean-preprocessing-directives <daedalean-preprocessing-directives.html>`_, "Yes"
    `daedalean-protected-must-not-be-used <daedalean-protected-must-not-be-used.html>`_,
    `daedalean-structs-and-classes <daedalean-structs-and-classes.html>`_, "Yes"
    `daedalean-switch-statement <daedalean-switch-statement.html>`_,
    `daedalean-ternary-operator-must-not-be-used <daedalean-ternary-operator-must-not-be-used.html>`_,
-   `daedalean-lambda-return-type <daedalean-lambda-return-type.html>`_, "Yes"
-   `daedalean-operator-overloading <daedalean-operator-overloading.html>`_,
    `darwin-avoid-spinlock <darwin-avoid-spinlock.html>`_,
    `darwin-dispatch-once-nonstatic <darwin-dispatch-once-nonstatic.html>`_, "Yes"
    `fuchsia-default-arguments-calls <fuchsia-default-arguments-calls.html>`_,

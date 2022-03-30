@@ -14,6 +14,7 @@ add_clang_library(clangTidyDaedaleanModule
   FloatingPointComparisonCheck.cpp
   IncludeOrderCheck.cpp
   LambdaImplicitCaptureCheck.cpp
+  PreprocessingDirectivesCheck.cpp
   StructsAndClassesCheck.cpp
   ProtectedMustNotBeUsedCheck.cpp
   SwitchStatementCheck.cpp

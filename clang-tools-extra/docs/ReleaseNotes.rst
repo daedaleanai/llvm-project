@@ -239,6 +239,9 @@ New checks
 
   FIXME: add release notes.
 
+- New :doc:`daedalean-preprocessing-directives
+  <clang-tidy/checks/daedalean-preprocessing-directives>` check.
+
 - New :doc:`daedalean-protected-must-not-be-used
   <clang-tidy/checks/daedalean-protected-must-not-be-used>` check.
 
