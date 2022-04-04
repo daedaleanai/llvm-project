@@ -282,6 +282,11 @@ New checks
 
   FIXME: add release notes.
 
+- New :doc:`daedalean-friend-declarations
+  <clang-tidy/checks/daedalean-friend-declarations>` check.
+
+  FIXME: add release notes.
+
 - New :doc:`daedalean-include-order
   <clang-tidy/checks/daedalean-include-order>` check.
 
