@@ -25,29 +25,42 @@ void FriendDeclarationsCheck::check(const MatchFinder::MatchResult &Result) {
 
   const auto decl = MatchedDecl->getFriendDecl();
 
-  if (MatchedDecl->isFunctionOrFunctionTemplate() || true) {
-    if (const auto method = llvm::dyn_cast_or_null<FunctionDecl>(decl); method) {
-        if (method->isOverloadedOperator()) {
-          if (method->getNumParams() == 2) {
-            if (const auto cls = llvm::dyn_cast_or_null<CXXRecordDecl>(MatchedDecl->getLexicalDeclContext())) {
-              const auto type = cls->getTypeForDecl()->getCanonicalTypeUnqualified();
+  if (MatchedDecl->isFunctionOrFunctionTemplate()) {
+    if (const auto method = llvm::dyn_cast_or_null<FunctionDecl>(decl);
+        method) {
+      if (method->isOverloadedOperator()) {
+        if (method->getNumParams() == 2) {
+          if (const auto cls = llvm::dyn_cast_or_null<CXXRecordDecl>(
+                  MatchedDecl->getLexicalDeclContext())) {
+            const auto type =
+                cls->getTypeForDecl()->getCanonicalTypeUnqualified();
 
-              if (type == method->getParamDecl(1)->getType().getNonReferenceType()->getCanonicalTypeUnqualified()) {
-                if (type != method->getParamDecl(0)->getType().getNonReferenceType()->getCanonicalTypeUnqualified()) {
-                  return;
-                }
+            if (type == method->getParamDecl(1)
+                            ->getType()
+                            .getNonReferenceType()
+                            ->getCanonicalTypeUnqualified()) {
+              if (type != method->getParamDecl(0)
+                              ->getType()
+                              .getNonReferenceType()
+                              ->getCanonicalTypeUnqualified()) {
+                return;
               }
             }
           }
         }
+      }
     }
   }
 
   if (MatchedDecl->isTemplated()) {
-    const auto ctx  = MatchedDecl->getLexicalDeclContext();
-    if (const auto cls = llvm::dyn_cast_or_null<const CXXRecordDecl>(ctx); cls && cls->isTemplated()) {
-      if (const auto friendCls =llvm::dyn_cast_or_null<ClassTemplateDecl>(decl); friendCls) {
-        if (cls->getQualifiedNameAsString() == friendCls->getQualifiedNameAsString()) {
+    const auto ctx = MatchedDecl->getLexicalDeclContext();
+    if (const auto cls = llvm::dyn_cast_or_null<const CXXRecordDecl>(ctx);
+        cls && cls->isTemplated()) {
+      if (const auto friendCls =
+              llvm::dyn_cast_or_null<ClassTemplateDecl>(decl);
+          friendCls) {
+        if (cls->getQualifiedNameAsString() ==
+            friendCls->getQualifiedNameAsString()) {
           return;
         }
       }
