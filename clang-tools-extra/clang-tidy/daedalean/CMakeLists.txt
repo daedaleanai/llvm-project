@@ -15,6 +15,7 @@ add_clang_library(clangTidyDaedaleanModule
   FriendDeclarationsCheck.cpp
   IncludeOrderCheck.cpp
   LambdaImplicitCaptureCheck.cpp
+  LocalMethodsAndTypesCheck.cpp
   PreprocessingDirectivesCheck.cpp
   StructsAndClassesCheck.cpp
   ProtectedMustNotBeUsedCheck.cpp

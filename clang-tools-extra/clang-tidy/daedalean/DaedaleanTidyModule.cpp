@@ -18,6 +18,7 @@
 #include "FriendDeclarationsCheck.h"
 #include "IncludeOrderCheck.h"
 #include "LambdaImplicitCaptureCheck.h"
+#include "LocalMethodsAndTypesCheck.h"
 #include "PreprocessingDirectivesCheck.h"
 #include "ProtectedMustNotBeUsedCheck.h"
 #include "StructsAndClassesCheck.h"
@@ -54,6 +55,8 @@ public:
         "daedalean-include-order");
     CheckFactories.registerCheck<LambdaImplicitCaptureCheck>(
         "daedalean-lambda-implicit-capture");
+    CheckFactories.registerCheck<LocalMethodsAndTypesCheck>(
+        "daedalean-local-methods-and-types");
     CheckFactories.registerCheck<PreprocessingDirectivesCheck>(
         "daedalean-preprocessing-directives");
     CheckFactories.registerCheck<ProtectedMustNotBeUsedCheck>(

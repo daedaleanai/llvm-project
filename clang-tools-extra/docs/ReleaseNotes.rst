@@ -244,6 +244,9 @@ New checks
 
   FIXME: add release notes.
 
+- New :doc:`daedalean-local-methods-and-types
+  <clang-tidy/checks/daedalean-local-methods-and-types>` check.
+
 - New :doc:`daedalean-preprocessing-directives
   <clang-tidy/checks/daedalean-preprocessing-directives>` check.
 
