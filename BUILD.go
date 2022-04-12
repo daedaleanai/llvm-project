@@ -2,7 +2,7 @@ package llvm
 
 var CLang       = in("bin/clang")
 var ClangPp     = in("bin/clang++")
-var Lld         = in("bin/lld")
+var Ld          = in("bin/ld.lld")
 var Ar          = in("bin/llvm-ar")
 var As          = in("bin/llvm-as")
 var Objdump     = in("bin/llvm-objdump")
