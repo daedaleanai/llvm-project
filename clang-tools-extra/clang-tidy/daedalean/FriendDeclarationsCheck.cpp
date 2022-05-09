@@ -24,6 +24,10 @@ void FriendDeclarationsCheck::check(const MatchFinder::MatchResult &Result) {
   const auto *MatchedDecl = Result.Nodes.getNodeAs<FriendDecl>("x");
 
   const auto decl = MatchedDecl->getFriendDecl();
+  if (!decl) {
+    diag(MatchedDecl->getLocation(), "Unresolved friend declaration");
+    return;
+  }
 
   if (MatchedDecl->isFunctionOrFunctionTemplate()) {
     if (const auto method = llvm::dyn_cast_or_null<FunctionDecl>(decl);
@@ -52,10 +56,10 @@ void FriendDeclarationsCheck::check(const MatchFinder::MatchResult &Result) {
     }
   }
 
-  if (MatchedDecl->isTemplated()) {
+  if (decl->isTemplated()) {
     const auto ctx = MatchedDecl->getLexicalDeclContext();
     if (const auto cls = llvm::dyn_cast_or_null<const CXXRecordDecl>(ctx);
-        cls && cls->isTemplated()) {
+        cls && (cls->isTemplated() || llvm::isa<ClassTemplateSpecializationDecl>(cls)) ) {
       if (const auto friendCls =
               llvm::dyn_cast_or_null<ClassTemplateDecl>(decl);
           friendCls) {

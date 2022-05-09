@@ -52,28 +52,6 @@ bool isFinal(const CXXRecordDecl *pDecl) {
 
 }
 
-struct BaseRef {
-  std::string ref;
-  const CXXBaseSpecifier base;
-
-  std::string getName() const {
-    return base.getType()->getAsCXXRecordDecl()->getQualifiedNameAsString();
-  }
-
-  bool operator <(const BaseRef & other) const {
-    return ref < other.ref;
-  }
-};
-
-void walkBases(const CXXRecordDecl *pDecl, std::unordered_map<std::string, std::set<BaseRef>> & references) {
-  const auto ref = pDecl->getQualifiedNameAsString();
-  for (const auto base : pDecl->bases()) {
-    const auto decl = base.getType()->getAsCXXRecordDecl();
-    references[decl->getQualifiedNameAsString()].insert({ref, base});
-    walkBases(decl, references);
-  }
-}
-
 }
 
 void DerivedClassesCheck::registerMatchers(MatchFinder *Finder) {
@@ -89,11 +67,15 @@ void DerivedClassesCheck::check(const MatchFinder::MatchResult &Result) {
     return;
   }
 
+  if (MatchedDecl->isLambda()) {
+    return;
+  }
+
   if (isInterface(MatchedDecl)) {
     const auto dtor = MatchedDecl->getDestructor();
     // 1. Each interface MUST have a virtual default destructor.
     if (!dtor || (dtor->isImplicit() && !dtor->isVirtual())) {
-      diag(MatchedDecl->getBraceRange().getBegin(), "Interface must have virtual defaulted destructor");
+      diag(MatchedDecl->getBraceRange().getBegin(), "Interface %0 must have virtual defaulted destructor") << MatchedDecl;
     } else {
       if (!dtor->isVirtual()) {
         diag(dtor->getLocation(), "Interface destructor must be virtual");
@@ -109,7 +91,7 @@ void DerivedClassesCheck::check(const MatchFinder::MatchResult &Result) {
   } else {
     // 7. If a class contains at least one non-pure-virtual method other than destructor it MUST be declared final.
     if (!isFinal(MatchedDecl)) {
-      diag(MatchedDecl->getLocation(), "Non-interface class must be final");
+      diag(MatchedDecl->getLocation(), "Non-interface class %0 must be final") << MatchedDecl;
       diag(MatchedDecl->getLocation(), "Make class final", DiagnosticIDs::Note) << FixItHint::CreateInsertion(MatchedDecl->getLocation(), " final");
     }
 
@@ -120,18 +102,25 @@ void DerivedClassesCheck::check(const MatchFinder::MatchResult &Result) {
       if (!m->isVirtual()) {
         continue;
       }
+      if (m->isPure()) {
+        continue;
+      }
+
+      if (llvm::isa<CXXDestructorDecl>(m) && m->isDefaulted()) {
+        continue;
+      }
       // 6. Virtual functions MUST contain exactly one of two specifiers: virtual for new function or final if function overrides method from base class.
       if (!m->hasAttr<FinalAttr>()) {
         diag(m->getLocation(), "Implemented virtual methods must be final");
         if (const auto attr = m->getAttr<OverrideAttr>(); attr) {
-          diag(m->getBody()->getBeginLoc(), "Make method final",
+          diag(m->getLocation(), "Make method final",
                DiagnosticIDs::Note)
               << FixItHint::CreateReplacement(attr->getLocation(),
                                             " final");
         } else {
-          diag(m->getBody()->getBeginLoc(), "Make method final",
+          diag(m->getLocation(), "Make method final",
                DiagnosticIDs::Note)
-              << FixItHint::CreateInsertion(m->getBody()->getBeginLoc(),
+              << FixItHint::CreateInsertion(m->getLocation(),
                                             " final");
         }
       }
@@ -169,7 +158,9 @@ void DerivedClassesCheck::check(const MatchFinder::MatchResult &Result) {
 
   for (const auto base : MatchedDecl->bases()) {
     // 2. Inheritance from base class with non-pure-virtual methods other than destructor and/or data members is forbidden.
-    if (!isInterface(base.getType()->getAsCXXRecordDecl())) {
+    const CXXRecordDecl * baseRecord = getRecordFromBase(base);
+
+    if (!isInterface(baseRecord)) {
       diag(base.getBeginLoc(), "Inheritance from non-interface type is forbidden");
     } else {
       // 3. Public inheritance MUST be used to implement interfaces.
@@ -211,6 +202,40 @@ void DerivedClassesCheck::check(const MatchFinder::MatchResult &Result) {
 
   }
 
+}
+
+const CXXRecordDecl * DerivedClassesCheck::getRecordFromBase(const CXXBaseSpecifier & base) {
+  if (const CXXRecordDecl * baseRecord = base.getType()->getAsCXXRecordDecl()) {
+    return baseRecord;
+  }
+
+  if (const auto spec = llvm::dyn_cast_or_null<TemplateSpecializationType>(base.getType().getTypePtr())) {
+    if (const auto cls = llvm::dyn_cast_or_null<ClassTemplateDecl>(
+            spec->getTemplateName().getAsTemplateDecl())) {
+      return cls->getTemplatedDecl();
+    } else {
+      diag(base.getBeginLoc(),
+           "Unable to get base template spec %0 as record")
+          << spec->getTemplateName();
+      return nullptr;
+    }
+  } else {
+    diag(base.getBeginLoc(),
+         "Unable to get base of type %0 as record or template") << base.getType();
+    return nullptr;
+  }
+}
+
+void DerivedClassesCheck::walkBases(const CXXRecordDecl *pDecl, std::unordered_map<std::string, std::set<BaseRef>> & references) {
+  const auto ref = pDecl->getQualifiedNameAsString();
+  for (const auto base : pDecl->bases()) {
+    const auto decl = getRecordFromBase(base);
+    if (!decl) {
+      continue;
+    }
+    references[decl->getQualifiedNameAsString()].insert({ref, base});
+    walkBases(decl, references);
+  }
 }
 
 

@@ -11,6 +11,8 @@
 
 #include "../ClangTidyCheck.h"
 
+#include <set>
+
 namespace clang {
 namespace tidy {
 namespace daedalean {
@@ -25,6 +27,23 @@ public:
       : ClangTidyCheck(Name, Context) {}
   void registerMatchers(ast_matchers::MatchFinder *Finder) override;
   void check(const ast_matchers::MatchFinder::MatchResult &Result) override;
+
+private:
+  struct BaseRef {
+    std::string ref;
+    const CXXBaseSpecifier base;
+
+    std::string getName() const {
+      return base.getType()->getAsCXXRecordDecl()->getQualifiedNameAsString();
+    }
+
+    bool operator <(const BaseRef & other) const {
+      return ref < other.ref;
+    }
+  };
+
+  void walkBases(const CXXRecordDecl *pDecl, std::unordered_map<std::string, std::set<BaseRef>> & references);
+  const CXXRecordDecl * getRecordFromBase(const CXXBaseSpecifier & base);
 };
 
 } // namespace daedalean

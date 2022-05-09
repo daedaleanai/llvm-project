@@ -16,7 +16,7 @@ cmake -S llvm -B build -G "Unix Makefiles" \
     #-DLLVM_ENABLE_RUNTIMES="compiler-rt" \
 
 cd build
-make
+make -j5
 make install
 cd ..
 cp BUILD.go DIST/llvm

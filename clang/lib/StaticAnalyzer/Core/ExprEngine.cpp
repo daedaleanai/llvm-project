@@ -2604,6 +2604,12 @@ void ExprEngine::VisitCommonDeclRefExpr(const Expr *Ex, const NamedDecl *D,
     return;
   }
 
+  if (isa<TemplateParamObjectDecl>(D)) {
+    // FIXME: proper support for non-type template arguments
+    // For now, let's just prevent crashing.
+    return;
+  }
+
   llvm_unreachable("Support for this Decl not implemented.");
 }
 

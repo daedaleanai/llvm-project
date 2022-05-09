@@ -1,5 +1,5 @@
 // RUN: %check_clang_tidy %s daedalean-friend-declarations %t
-
+#if 0
 class S {};
 
 class A {
@@ -10,7 +10,7 @@ class A {
   friend S& operator << (S&, const A&);
 };
 
-
+#endif
 template<typename T>
 class C {
 
@@ -18,3 +18,6 @@ class C {
   friend class C;
 };
 
+C<int> bar() {
+  return {};
+}

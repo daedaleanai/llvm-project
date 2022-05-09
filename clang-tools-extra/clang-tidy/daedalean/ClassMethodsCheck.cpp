@@ -23,20 +23,41 @@ void ClassMethodsCheck::registerMatchers(MatchFinder *Finder) {
 void ClassMethodsCheck::check(const MatchFinder::MatchResult &Result) {
   const auto *MatchedDecl = Result.Nodes.getNodeAs<CXXMethodDecl>("x");
 
+  if (MatchedDecl->isTemplateInstantiation()) {
+    return;
+  }
+
   if (!MatchedDecl->doesThisDeclarationHaveABody()) {
     return;
   }
 
-  if (MatchedDecl->getParent()->isTemplated()) {
+  if (MatchedDecl->isImplicit() || MatchedDecl->isDefaulted()) {
     return;
-  }
+  } 
 
   if (!MatchedDecl->getLexicalDeclContext()->isRecord()) {
     return;
   }
 
-  diag(MatchedDecl->getLocation(), "function %0 must be implemented outside class definition")
-      << MatchedDecl;
+  if (const auto cls = llvm::dyn_cast_or_null<CXXRecordDecl>(MatchedDecl->getLexicalDeclContext())) {
+    if (cls->isLambda()) {
+        return;
+    }
+    if (cls->getDescribedClassTemplate()) {
+        return;
+    }
+
+    if (llvm::isa<ClassTemplateSpecializationDecl>(cls)) {
+      return;
+    }
+
+    if (cls->isTemplated()) {
+        return;
+    }
+
+    diag(MatchedDecl->getLocation(), "function %0 must be implemented outside class definition %1")
+      << MatchedDecl << cls;
+  }
 }
 
 } // namespace daedalean

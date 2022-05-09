@@ -7,7 +7,7 @@ public:
 };
 
 class I2 {
-// CHECK-MESSAGES: :[[@LINE-1]]:10: warning: Interface must have virtual defaulted destructor [daedalean-derived-classes]
+// CHECK-MESSAGES: :[[@LINE-1]]:10: warning: Interface 'I2' must have virtual defaulted destructor [daedalean-derived-classes]
 public:
   virtual void foo() = 0;
 };
@@ -42,12 +42,12 @@ class I6 : public I1 {
 };
 
 class B1 {
-  // CHECK-MESSAGES: :[[@LINE-1]]:7: warning: Non-interface class must be final [daedalean-derived-classes]
+  // CHECK-MESSAGES: :[[@LINE-1]]:7: warning: Non-interface class 'B1' must be final [daedalean-derived-classes]
   int a;
 };
 
 class B2 {
-  // CHECK-MESSAGES: :[[@LINE-1]]:7: warning: Non-interface class must be final [daedalean-derived-classes]
+  // CHECK-MESSAGES: :[[@LINE-1]]:7: warning: Non-interface class 'B2' must be final [daedalean-derived-classes]
   void foo();
 };
 
@@ -96,14 +96,28 @@ public:
 };
 
 class S1 {
-  // CHECK-MESSAGES: :[[@LINE-1]]:7: warning: Non-interface class must be final [daedalean-derived-classes]
+  // CHECK-MESSAGES: :[[@LINE-1]]:7: warning: Non-interface class 'S1' must be final [daedalean-derived-classes]
   virtual void foo() {}
   // CHECK-MESSAGES: :[[@LINE-1]]:16: warning: Implemented virtual methods must be final  [daedalean-derived-classes]
   // CHECK-FIXES: final
 };
 
 class S2 {
-  // CHECK-MESSAGES: :[[@LINE-1]]:7: warning: Non-interface class must be final [daedalean-derived-classes]
+  // CHECK-MESSAGES: :[[@LINE-1]]:7: warning: Non-interface class 'S2' must be final [daedalean-derived-classes]
   int a;
   void foo() {}
+};
+
+
+template<typename T>
+class TI1 {
+public:
+  virtual ~TI1() = default;
+  virtual void foo() = 0;
+};
+
+template<typename T>
+class TC1 final : public TI1<T> {
+public:
+    void foo() final { }
 };

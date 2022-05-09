@@ -20,16 +20,23 @@ namespace daedalean {
 
 namespace {
 
-class IncludeOrderPPCallbacks : public PPCallbacks {
+class PreprocessingDirectivesPPCallbacks : public PPCallbacks {
 public:
-  explicit IncludeOrderPPCallbacks(ClangTidyCheck &Check,
+  explicit PreprocessingDirectivesPPCallbacks(ClangTidyCheck &Check,
                                    const SourceManager &SM)
       : Check(Check), SM(SM) {}
 
   virtual void PragmaDirective(SourceLocation Loc,
                                PragmaIntroducerKind Introducer) override {
     const auto fileId = SM.getFileID(Loc);
-    const auto fileName = SM.getFileEntryForID(fileId)->getName();
+    if (!fileId.isValid()) {
+        return;
+    }
+    const auto fileEntry = SM.getFileEntryForID(fileId);
+    if (!fileEntry) {
+        return;
+    }
+    const auto fileName = fileEntry->getName();
     if (fileName.endswith(".hh") || fileName.endswith(".h")) {
       const char *data = SM.getCharacterData(Loc);
       std::string pragmaDeclaration;
@@ -157,7 +164,7 @@ private:
 
 void PreprocessingDirectivesCheck::registerPPCallbacks(
     const SourceManager &SM, Preprocessor *PP, Preprocessor *ModuleExpanderPP) {
-  PP->addPPCallbacks(::std::make_unique<IncludeOrderPPCallbacks>(*this, SM));
+  PP->addPPCallbacks(::std::make_unique<PreprocessingDirectivesPPCallbacks>(*this, SM));
 }
 
 } // namespace daedalean

@@ -30,14 +30,14 @@ void StructsAndClassesCheck::check(const MatchFinder::MatchResult &Result) {
 
   if (MatchedDecl->isPOD()) {
     if (!MatchedDecl->isStruct()) {
-      diag(MatchedDecl->getBeginLoc(), "POD type must be declared as struct")
+      diag(MatchedDecl->getBeginLoc(), "POD type %0 must be declared as struct")
           << MatchedDecl;
       diag(MatchedDecl->getBeginLoc(), "use struct", DiagnosticIDs::Note)
           << FixItHint::CreateReplacement(MatchedDecl->getBeginLoc(), "struct");
     }
   } else {
     if (!MatchedDecl->isClass()) {
-      diag(MatchedDecl->getBeginLoc(), "Non-POD type must be declared as class")
+      diag(MatchedDecl->getBeginLoc(), "Non-POD type %0 must be declared as class")
           << MatchedDecl;
       diag(MatchedDecl->getBeginLoc(), "use class", DiagnosticIDs::Note)
           << FixItHint::CreateReplacement(MatchedDecl->getBeginLoc(), "class");

@@ -23,11 +23,19 @@ void AssignmentOperatorsCheck::registerMatchers(MatchFinder *Finder) {
 void AssignmentOperatorsCheck::check(const MatchFinder::MatchResult &Result) {
   const auto *MatchedDecl = Result.Nodes.getNodeAs<CXXRecordDecl>("x");
 
+  if (!MatchedDecl->isBeingDefined()) {
+    return;
+  }
+
   if (MatchedDecl->isAbstract()) {
     return;
   }
 
   if (MatchedDecl->isStruct()) {
+    return;
+  }
+
+  if (MatchedDecl->isLambda()) {
     return;
   }
 
@@ -63,11 +71,11 @@ void AssignmentOperatorsCheck::check(const MatchFinder::MatchResult &Result) {
   }
 
   if (!hasMove) {
-    diag(MatchedDecl->getLocation(), "Non-abstract class must implement move-assignment operator");
+    diag(MatchedDecl->getLocation(), "Non-abstract class %0 must implement move-assignment operator") << MatchedDecl;
   }
 
   if (!hasCopy) {
-    diag(MatchedDecl->getLocation(), "Non-abstract class must implement copy-assignment operator");
+    diag(MatchedDecl->getLocation(), "Non-abstract class %0 must implement copy-assignment operator") << MatchedDecl;
   }
 }
 

@@ -78,6 +78,10 @@ private:
         CharSourceRange::getTokenRange(MatchedLiteral->getSourceRange()),
         *Result.SourceManager, getLangOpts());
 
+    const auto parents = Result.Context->getParents(*MatchedLiteral);
+
+    const auto val = parents[0].template get<CallExpr>();
+
     diag(MatchedLiteral->getLocation(),
          "%0 is a magic number; consider replacing it with a named constant")
         << LiteralSourceText;
