@@ -282,6 +282,19 @@ C++20 Feature Support
 - No longer attempt to evaluate a consteval UDL function call at runtime when
   it is called through a template instantiation. This fixes
   `Issue 54578 <https://github.com/llvm/llvm-project/issues/54578>`_.
+- Implemented ``__builtin_source_location()``, which enables library support
+  for ``std::source_location``.
+
+- The mangling scheme for C++20 modules has incompatibly changed. The
+  initial mangling was discovered not to be reversible, and the weak
+  ownership design decision did not give the backwards compatibility
+  that was hoped for. C++20 since added ``extern "C++"`` semantics
+  that can be used for such compatibility. The demangler now demangles
+  symbols with named module attachment.
+
+- As per "Conditionally Trivial Special Member Functions" (P0848), it is
+  now possible to overload destructors using concepts. Note that the rest
+  of the paper about other special member functions is not yet implemented.
 
 C++2b Feature Support
 ^^^^^^^^^^^^^^^^^^^^^
