@@ -280,12 +280,10 @@ C++20 Feature Support
   can be disabled by defining the ``_CLANG_DISABLE_CRT_DEPRECATION_WARNINGS``
   macro prior to including the header.
 
-
 C++2b Feature Support
 ^^^^^^^^^^^^^^^^^^^^^
 - Implemented `P1938R3: if consteval <https://wg21.link/P1938R3>`_.
 - Implemented `P2360R0: Extend init-statement to allow alias-declaration <https://wg21.link/P2360R0>`_.
-
 
 CUDA Language Changes in Clang
 ------------------------------
@@ -337,6 +335,11 @@ ABI Changes in Clang
   it is now mangled using a dedicated production. Note: the ABI for ``_BitInt(N)``
   is still in the process of being stabilized, so this type should not yet be
   used in interfaces that require ABI stability.
+- All copy constructors can now be trivial if they are not user-provided,
+  regardless of the type qualifiers of the argument of the defaulted constructor,
+  fixing dr2171.
+  You can switch back to the old ABI behavior with the flag:
+  ``-fclang-abi-compat=14.0``.
 
 OpenMP Support in Clang
 -----------------------
