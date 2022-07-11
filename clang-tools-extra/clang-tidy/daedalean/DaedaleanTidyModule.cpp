@@ -13,17 +13,18 @@
 #include "ClassMethodsCheck.h"
 #include "CommaOperatorMustNotBeUsedCheck.h"
 #include "DerivedClassesCheck.h"
-#include "LambdaReturnTypeCheck.h"
 #include "EnumClassCheck.h"
 #include "FloatingPointComparisonCheck.h"
 #include "FriendDeclarationsCheck.h"
 #include "IncludeOrderCheck.h"
 #include "LambdaImplicitCaptureCheck.h"
-#include "TernaryOperatorMustNotBeUsedCheck.h"
+#include "LambdaReturnTypeCheck.h"
+#include "OperatorOverloadingCheck.h"
 #include "PreprocessingDirectivesCheck.h"
 #include "ProtectedMustNotBeUsedCheck.h"
 #include "StructsAndClassesCheck.h"
 #include "SwitchStatementCheck.h"
+#include "TernaryOperatorMustNotBeUsedCheck.h"
 
 using namespace clang::ast_matchers;
 
@@ -37,22 +38,19 @@ public:
   void addCheckFactories(ClangTidyCheckFactories &CheckFactories) override {
     CheckFactories.registerCheck<AssignmentOperatorsCheck>(
         "daedalean-assignment-operators");
-    CheckFactories.registerCheck<ClassMethodsCheck>(
-        "daedalean-class-methods");
+    CheckFactories.registerCheck<ClassMethodsCheck>("daedalean-class-methods");
     CheckFactories.registerCheck<CommaOperatorMustNotBeUsedCheck>(
         "daedalean-comma-operator-must-not-be-used");
     CheckFactories.registerCheck<DerivedClassesCheck>(
         "daedalean-derived-classes");
     CheckFactories.registerCheck<LambdaReturnTypeCheck>(
         "daedalean-lambda-return-type");
-    CheckFactories.registerCheck<EnumClassCheck>(
-        "daedalean-enum-class");
+    CheckFactories.registerCheck<EnumClassCheck>("daedalean-enum-class");
     CheckFactories.registerCheck<FloatingPointComparisonCheck>(
         "daedalean-floating-point-comparison");
     CheckFactories.registerCheck<FriendDeclarationsCheck>(
         "daedalean-friend-declarations");
-    CheckFactories.registerCheck<IncludeOrderCheck>(
-        "daedalean-include-order");
+    CheckFactories.registerCheck<IncludeOrderCheck>("daedalean-include-order");
     CheckFactories.registerCheck<LambdaImplicitCaptureCheck>(
         "daedalean-lambda-implicit-capture");
     CheckFactories.registerCheck<PreprocessingDirectivesCheck>(
@@ -67,6 +65,8 @@ public:
         "daedalean-ternary-operator-must-not-be-used");
     CheckFactories.registerCheck<SwitchStatementCheck>(
         "daedalean-switch-statement");
+    CheckFactories.registerCheck<OperatorOverloadingCheck>(
+        "daedalean-operator-overloading");
   }
 };
 
