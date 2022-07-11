@@ -23,21 +23,22 @@ namespace {
 class PreprocessingDirectivesPPCallbacks : public PPCallbacks {
 public:
   explicit PreprocessingDirectivesPPCallbacks(ClangTidyCheck &Check,
-                                   const SourceManager &SM)
+                                              const SourceManager &SM)
       : Check(Check), SM(SM) {}
 
   virtual void PragmaDirective(SourceLocation Loc,
                                PragmaIntroducerKind Introducer) override {
     const auto fileId = SM.getFileID(Loc);
     if (!fileId.isValid()) {
-        return;
+      return;
     }
     const auto fileEntry = SM.getFileEntryForID(fileId);
     if (!fileEntry) {
-        return;
+      return;
     }
     const auto fileName = fileEntry->getName();
-    if (fileName.endswith(".hh") || fileName.endswith(".h")) {
+    if (fileName.endswith(".hh") || fileName.endswith(".h") ||
+        fileName.endswith(".hpp")) {
       const char *data = SM.getCharacterData(Loc);
       std::string pragmaDeclaration;
 
@@ -125,6 +126,7 @@ public:
   }
 
   virtual void EndOfMainFile() override {
+
     for (const auto &[fileId, hasGuard] : PragmaOnce) {
       if (hasGuard) {
         continue;
@@ -143,7 +145,8 @@ public:
     if (Reason == EnterFile && FileType == SrcMgr::C_User) {
       if (const FileEntry *FE = SM.getFileEntryForID(SM.getFileID(Loc))) {
         const auto fileName = FE->getName();
-        if (!fileName.endswith(".hh") && !fileName.endswith(".h")) {
+        if (!fileName.endswith(".hh") && !fileName.endswith(".h") &&
+            !fileName.endswith(".hpp")) {
           return;
         }
 
@@ -164,7 +167,8 @@ private:
 
 void PreprocessingDirectivesCheck::registerPPCallbacks(
     const SourceManager &SM, Preprocessor *PP, Preprocessor *ModuleExpanderPP) {
-  PP->addPPCallbacks(::std::make_unique<PreprocessingDirectivesPPCallbacks>(*this, SM));
+  PP->addPPCallbacks(
+      ::std::make_unique<PreprocessingDirectivesPPCallbacks>(*this, SM));
 }
 
 } // namespace daedalean
