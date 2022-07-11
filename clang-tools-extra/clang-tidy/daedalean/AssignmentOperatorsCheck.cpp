@@ -23,10 +23,6 @@ void AssignmentOperatorsCheck::registerMatchers(MatchFinder *Finder) {
 void AssignmentOperatorsCheck::check(const MatchFinder::MatchResult &Result) {
   const auto *MatchedDecl = Result.Nodes.getNodeAs<CXXRecordDecl>("x");
 
-  if (!MatchedDecl->isBeingDefined()) {
-    return;
-  }
-
   if (MatchedDecl->isAbstract()) {
     return;
   }
@@ -39,43 +35,16 @@ void AssignmentOperatorsCheck::check(const MatchFinder::MatchResult &Result) {
     return;
   }
 
-  bool hasCopy = false;
-  bool hasMove = false;
-
-  for (const auto member: MatchedDecl->methods()) {
-    if (!member->isOverloadedOperator()) {
-      continue;
-    }
-
-    if (member->getOverloadedOperator() != OO_Equal) {
-      continue;
-    }
-
-    if (member->isImplicit()) {
-      continue;
-    }
-
-    const auto argType = member->getParamDecl(0)->getType();
-
-    if (argType.getNonReferenceType().getUnqualifiedType() != MatchedDecl->getTypeForDecl()->getCanonicalTypeUnqualified()) {
-      continue;
-    }
-
-
-    if (argType->isRValueReferenceType()) {
-      hasMove = true;
-    }
-    if (argType->isLValueReferenceType() && argType.getNonReferenceType().isConstQualified()) {
-      hasCopy = true;
-    }
+  if (!MatchedDecl->hasUserDeclaredCopyAssignment()) {
+    diag(MatchedDecl->getLocation(),
+         "Non-abstract class %0 must implement copy-assignment operator")
+        << MatchedDecl;
   }
 
-  if (!hasMove) {
-    diag(MatchedDecl->getLocation(), "Non-abstract class %0 must implement move-assignment operator") << MatchedDecl;
-  }
-
-  if (!hasCopy) {
-    diag(MatchedDecl->getLocation(), "Non-abstract class %0 must implement copy-assignment operator") << MatchedDecl;
+  if (!MatchedDecl->hasUserDeclaredMoveAssignment()) {
+    diag(MatchedDecl->getLocation(),
+         "Non-abstract class %0 must implement move-assignment operator")
+        << MatchedDecl;
   }
 }
 
