@@ -25,6 +25,19 @@ public:
       : ClangTidyCheck(Name, Context) {}
   void registerMatchers(ast_matchers::MatchFinder *Finder) override;
   void check(const ast_matchers::MatchFinder::MatchResult &Result) override;
+
+private:
+  enum class ShouldBeAClass {
+    No,
+    YesNotAnAggregate,
+    YesHasUserDeclaredCopyConstructor,
+    YesHasUserDeclaredMoveConstructor,
+    YesHasUserDeclaredCopyAssignment,
+    YesHasUserDeclaredMoveAssignment,
+    YesHasUserDeclaredDestructor,
+    YesHasNonConstMethod,
+  };
+  ShouldBeAClass shouldBeAClass(const CXXRecordDecl *record);
 };
 
 } // namespace daedalean
