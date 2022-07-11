@@ -1,4 +1,4 @@
-// RUN: %check_clang_tidy %s daedalean-lambda-implicit-capture %t
+// RUN: %check_clang_tidy -std c++20 %s daedalean-lambda-implicit-capture %t
 
 void f() {
 
@@ -13,9 +13,9 @@ void f() {
   auto bar2 = [a](auto i) { return i; };
   auto bar3 = [&a](auto i) { return i; };
 
-  auto foo3 = [=, t=a]() { return 2; };
+  auto foo3 = [=, t = a]() { return 2; };
   // CHECK-MESSAGES: :[[@LINE-1]]:15: warning: Lambda function capture must be explicit [daedalean-lambda-implicit-capture]
 
-  auto foo4 = [&, t=a]() { return 2; };
+  auto foo4 = [&, t = a]() { return 2; };
   // CHECK-MESSAGES: :[[@LINE-1]]:15: warning: Lambda function capture must be explicit [daedalean-lambda-implicit-capture]
 }

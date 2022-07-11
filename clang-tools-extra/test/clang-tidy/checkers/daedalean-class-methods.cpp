@@ -2,7 +2,7 @@
 
 class A {
   void foo() {}
-  // CHECK-MESSAGES: :[[@LINE-1]]:8: warning: function 'foo' must be implemented outside class definition [daedalean-class-methods]
+  // CHECK-MESSAGES: :[[@LINE-1]]:8: warning: function 'foo' must be implemented outside class definition 'A' [daedalean-class-methods]
   void bar();
 };
 
