@@ -12,6 +12,7 @@
 #include "../ClangTidyCheck.h"
 
 #include <set>
+#include <unordered_map>
 
 namespace clang {
 namespace tidy {
