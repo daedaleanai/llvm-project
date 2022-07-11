@@ -23,13 +23,15 @@ void FriendDeclarationsCheck::registerMatchers(MatchFinder *Finder) {
 void FriendDeclarationsCheck::check(const MatchFinder::MatchResult &Result) {
   const auto *MatchedDecl = Result.Nodes.getNodeAs<FriendDecl>("x");
 
-  const auto decl = MatchedDecl->getFriendDecl();
-  if (!decl) {
-    diag(MatchedDecl->getLocation(), "Unresolved friend declaration");
+  const NamedDecl *decl = MatchedDecl->getFriendDecl();
+  if (decl == nullptr) {
+    // In this case assume worst-case and simply don't allow the friend
+    // declaration since we just don't have enough information about it
+    diag(MatchedDecl->getLocation(), "Friend declaration must not be used");
     return;
   }
 
-  if (MatchedDecl->isFunctionOrFunctionTemplate()) {
+  if (decl->isFunctionOrFunctionTemplate()) {
     if (const auto method = llvm::dyn_cast_or_null<FunctionDecl>(decl);
         method) {
       if (method->isOverloadedOperator()) {
@@ -59,7 +61,8 @@ void FriendDeclarationsCheck::check(const MatchFinder::MatchResult &Result) {
   if (decl->isTemplated()) {
     const auto ctx = MatchedDecl->getLexicalDeclContext();
     if (const auto cls = llvm::dyn_cast_or_null<const CXXRecordDecl>(ctx);
-        cls && (cls->isTemplated() || llvm::isa<ClassTemplateSpecializationDecl>(cls)) ) {
+        cls && (cls->isTemplated() ||
+                llvm::isa<ClassTemplateSpecializationDecl>(cls))) {
       if (const auto friendCls =
               llvm::dyn_cast_or_null<ClassTemplateDecl>(decl);
           friendCls) {
