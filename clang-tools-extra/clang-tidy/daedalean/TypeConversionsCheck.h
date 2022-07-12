@@ -15,7 +15,7 @@ namespace clang {
 namespace tidy {
 namespace daedalean {
 
-/// Implements CS.R.18 Explicit type casts
+/// Implements CS.R.18 Explicit type casts and CS.R.44 Type conversions
 ///
 /// For the user-facing documentation see:
 /// http://clang.llvm.org/extra/clang-tidy/checks/daedalean-type-conversions.html
@@ -25,6 +25,14 @@ public:
       : ClangTidyCheck(Name, Context) {}
   void registerMatchers(ast_matchers::MatchFinder *Finder) override;
   void check(const ast_matchers::MatchFinder::MatchResult &Result) override;
+
+private:
+  void handleStaticCast(clang::ASTContext *context, QualType sourceType,
+                        QualType destType, SourceLocation location);
+  void handleImplicitCast(clang::ASTContext *context, QualType sourceType,
+                          QualType destType, SourceLocation location);
+  bool isSafeIntegralCast(clang::ASTContext *context, QualType sourceType,
+                          QualType destType) const;
 };
 
 } // namespace daedalean
