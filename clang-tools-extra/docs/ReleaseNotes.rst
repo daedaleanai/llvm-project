@@ -247,6 +247,9 @@ New checks
   Finds virtual classes whose destructor is neither public and virtual nor
   protected and non-virtual.
 
+- New :doc:`daedalean-type-conversions
+  <clang-tidy/checks/daedalean-type-conversions>` check.
+
 - New :doc:`misc-misleading-bidirectional <clang-tidy/checks/misc-misleading-bidirectional>` check.
 
   Inspects string literal and comments for unterminated bidirectional Unicode
