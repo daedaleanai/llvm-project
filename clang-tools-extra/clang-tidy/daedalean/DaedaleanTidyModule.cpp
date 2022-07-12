@@ -20,11 +20,12 @@
 #include "IncludeOrderCheck.h"
 #include "LambdaImplicitCaptureCheck.h"
 #include "OperatorOverloadingCheck.h"
-#include "TernaryOperatorMustNotBeUsedCheck.h"
 #include "PreprocessingDirectivesCheck.h"
 #include "ProtectedMustNotBeUsedCheck.h"
 #include "StructsAndClassesCheck.h"
 #include "SwitchStatementCheck.h"
+#include "TernaryOperatorMustNotBeUsedCheck.h"
+#include "TypeConversionsCheck.h"
 
 using namespace clang::ast_matchers;
 
@@ -44,6 +45,8 @@ public:
         "daedalean-comma-operator-must-not-be-used");
     CheckFactories.registerCheck<DerivedClassesCheck>(
         "daedalean-derived-classes");
+    CheckFactories.registerCheck<TypeConversionsCheck>(
+        "daedalean-type-conversions");
     CheckFactories.registerCheck<LambdaReturnTypeCheck>(
         "daedalean-lambda-return-type");
     CheckFactories.registerCheck<EnumClassCheck>(
