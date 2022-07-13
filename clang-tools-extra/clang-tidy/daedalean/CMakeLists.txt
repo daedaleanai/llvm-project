@@ -23,6 +23,7 @@ add_clang_library(clangTidyDaedaleanModule
   StructsAndClassesCheck.cpp
   ProtectedMustNotBeUsedCheck.cpp
   SwitchStatementCheck.cpp
+  UnionsMustNotBeUsedCheck.cpp
 
   LINK_LIBS
   clangTidy

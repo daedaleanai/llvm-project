@@ -26,6 +26,7 @@
 #include "SwitchStatementCheck.h"
 #include "TernaryOperatorMustNotBeUsedCheck.h"
 #include "TypeConversionsCheck.h"
+#include "UnionsMustNotBeUsedCheck.h"
 
 using namespace clang::ast_matchers;
 
@@ -73,6 +74,8 @@ public:
         "daedalean-ternary-operator-must-not-be-used");
     CheckFactories.registerCheck<SwitchStatementCheck>(
         "daedalean-switch-statement");
+    CheckFactories.registerCheck<UnionsMustNotBeUsedCheck>(
+        "daedalean-unions-must-not-be-used");
   }
 };
 
