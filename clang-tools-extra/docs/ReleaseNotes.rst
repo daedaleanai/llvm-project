@@ -250,6 +250,11 @@ New checks
 - New :doc:`daedalean-type-conversions
   <clang-tidy/checks/daedalean-type-conversions>` check.
 
+- New :doc:`daedalean-unions-must-not-be-used
+  <clang-tidy/checks/daedalean-unions-must-not-be-used>` check.
+
+  FIXME: add release notes.
+
 - New :doc:`misc-misleading-bidirectional <clang-tidy/checks/misc-misleading-bidirectional>` check.
 
   Inspects string literal and comments for unterminated bidirectional Unicode

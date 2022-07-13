@@ -175,7 +175,6 @@ Clang-Tidy Checks
    `daedalean-class-methods <daedalean-class-methods.html>`_,
    `daedalean-derived-classes <daedalean-derived-classes.html>`_, "Yes"
    `daedalean-enum-class <daedalean-enum-class.html>`_, "Yes"
-   `daedalean-type-conversions <daedalean-type-conversions.html>`_, "Yes"
    `daedalean-floating-point-comparison <daedalean-floating-point-comparison.html>`_,
    `daedalean-friend-declarations <daedalean-friend-declarations.html>`_,
    `daedalean-include-order <daedalean-include-order.html>`_, "Yes"
@@ -187,6 +186,8 @@ Clang-Tidy Checks
    `daedalean-structs-and-classes <daedalean-structs-and-classes.html>`_, "Yes"
    `daedalean-switch-statement <daedalean-switch-statement.html>`_,
    `daedalean-ternary-operator-must-not-be-used <daedalean-ternary-operator-must-not-be-used.html>`_,
+   `daedalean-type-conversions <daedalean-type-conversions.html>`_,
+   `daedalean-unions-must-not-be-used <daedalean-unions-must-not-be-used.html>`_, "Yes"
    `darwin-avoid-spinlock <darwin-avoid-spinlock.html>`_,
    `darwin-dispatch-once-nonstatic <darwin-dispatch-once-nonstatic.html>`_, "Yes"
    `fuchsia-default-arguments-calls <fuchsia-default-arguments-calls.html>`_,
@@ -346,6 +347,7 @@ Clang-Tidy Checks
    `readability-uppercase-literal-suffix <readability-uppercase-literal-suffix.html>`_, "Yes"
    `readability-use-anyofallof <readability-use-anyofallof.html>`_,
    `zircon-temporary-objects <zircon-temporary-objects.html>`_,
+
 
 .. csv-table:: Aliases..
    :header: "Name", "Redirect", "Offers fixes"
