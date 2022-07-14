@@ -277,12 +277,20 @@ New checks
 - New :doc:`daedalean-unions-must-not-be-used
   <clang-tidy/checks/daedalean-unions-must-not-be-used>` check.
 
-  Finds function/method declarations and makes sure they have a noexcept specifier or warns the user.
+  Warns if unions are used.
+
+- New :doc:`daedalean-use-nodiscard
+  <clang-tidy/checks/daedalean-use-nodiscard>` check.
+
+  Finds all functions and methods returning non-void and warns that they should be marked nodiscard.
+  Exceptions:
+   - Preincrement and predecrement operators that return references.
+   - Assignment operators that return references.
 
 - New :doc:`daedalean-use-noexcept
   <clang-tidy/checks/daedalean-use-noexcept>` check.
 
-  FIXME: add release notes.
+  Finds function/method declarations and makes sure they have a noexcept specifier or warns the user.
 
 - New :doc:`daedalean-vararg-functions-must-not-be-used
   <clang-tidy/checks/daedalean-vararg-functions-must-not-be-used>` check.

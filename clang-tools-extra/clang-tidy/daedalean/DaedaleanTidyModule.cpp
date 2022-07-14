@@ -30,6 +30,7 @@
 #include "TernaryOperatorMustNotBeUsedCheck.h"
 #include "TypeConversionsCheck.h"
 #include "UnionsMustNotBeUsedCheck.h"
+#include "UseNodiscardCheck.h"
 #include "UseNoexceptCheck.h"
 #include "VarargFunctionsMustNotBeUsedCheck.h"
 
@@ -90,6 +91,7 @@ public:
     CheckFactories.registerCheck<UseNoexceptCheck>("daedalean-use-noexcept");
     CheckFactories.registerCheck<VarargFunctionsMustNotBeUsedCheck>(
         "daedalean-vararg-functions-must-not-be-used");
+    CheckFactories.registerCheck<UseNodiscardCheck>("daedalean-use-nodiscard");
   }
 };
 

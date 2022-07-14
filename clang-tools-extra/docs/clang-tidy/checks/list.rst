@@ -193,6 +193,7 @@ Clang-Tidy Checks
    `daedalean-unions-must-not-be-used <daedalean-unions-must-not-be-used.html>`_,
    `daedalean-use-noexcept <daedalean-use-noexcept.html>`_,
    `daedalean-vararg-functions-must-not-be-used <daedalean-vararg-functions-must-not-be-used.html>`_,
+   `daedalean-use-nodiscard <daedalean-use-nodiscard.html>`_, "Yes"
    `darwin-avoid-spinlock <darwin-avoid-spinlock.html>`_,
    `darwin-dispatch-once-nonstatic <darwin-dispatch-once-nonstatic.html>`_, "Yes"
    `fuchsia-default-arguments-calls <fuchsia-default-arguments-calls.html>`_,
@@ -352,7 +353,6 @@ Clang-Tidy Checks
    `readability-uppercase-literal-suffix <readability-uppercase-literal-suffix.html>`_, "Yes"
    `readability-use-anyofallof <readability-use-anyofallof.html>`_,
    `zircon-temporary-objects <zircon-temporary-objects.html>`_,
-
 
 .. csv-table:: Aliases..
    :header: "Name", "Redirect", "Offers fixes"
