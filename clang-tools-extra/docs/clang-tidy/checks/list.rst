@@ -172,6 +172,7 @@ Clang-Tidy Checks
    `cppcoreguidelines-special-member-functions <cppcoreguidelines-special-member-functions.html>`_,
    `cppcoreguidelines-virtual-class-destructor <cppcoreguidelines-virtual-class-destructor.html>`_, "Yes"
    `daedalean-assignment-operators <daedalean-assignment-operators.html>`_,
+   `daedalean-auto <daedalean-auto.html>`_, "Yes"
    `daedalean-class-methods <daedalean-class-methods.html>`_,
    `daedalean-derived-classes <daedalean-derived-classes.html>`_, "Yes"
    `daedalean-enum-class <daedalean-enum-class.html>`_, "Yes"
@@ -348,7 +349,6 @@ Clang-Tidy Checks
    `readability-uppercase-literal-suffix <readability-uppercase-literal-suffix.html>`_, "Yes"
    `readability-use-anyofallof <readability-use-anyofallof.html>`_,
    `zircon-temporary-objects <zircon-temporary-objects.html>`_,
-
 
 .. csv-table:: Aliases..
    :header: "Name", "Redirect", "Offers fixes"
