@@ -114,14 +114,16 @@ void OperatorOverloadingCheck::check(const MatchFinder::MatchResult &Result) {
   case OO_StarEqual:
     [[fallthrough]];
   case OO_PercentEqual: {
-    checkReturnSelf(method->getDefinition()->getBody());
+    if (method->isDefined()) {
+      checkReturnSelf(method->getDefinition()->getBody());
+    }
     break;
   }
   case OO_Amp:
-      if (function->getNumParams() != 0) { // Skip binary form
-        break;
-      }
-      [[fallthrough]];
+    if (function->getNumParams() != 0) { // Skip binary form
+      break;
+    }
+    [[fallthrough]];
   case OO_AmpAmp:
     [[fallthrough]];
   case OO_PipePipe:
