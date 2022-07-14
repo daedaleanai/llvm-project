@@ -255,6 +255,12 @@ New checks
 
   FIXME: add release notes.
 
+- New :doc:`daedalean-vararg-functions-must-not-be-used
+  <clang-tidy/checks/daedalean-vararg-functions-must-not-be-used>` check.
+
+  Warns if c-style vararg functions are defined. Note that they can be declared for SFINAE,
+  but not defined.
+
 - New :doc:`misc-misleading-bidirectional <clang-tidy/checks/misc-misleading-bidirectional>` check.
 
   Inspects string literal and comments for unterminated bidirectional Unicode

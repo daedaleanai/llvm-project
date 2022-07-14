@@ -24,6 +24,7 @@ add_clang_library(clangTidyDaedaleanModule
   ProtectedMustNotBeUsedCheck.cpp
   SwitchStatementCheck.cpp
   UnionsMustNotBeUsedCheck.cpp
+  VarargFunctionsMustNotBeUsedCheck.cpp
 
   LINK_LIBS
   clangTidy

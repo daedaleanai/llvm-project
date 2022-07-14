@@ -187,7 +187,8 @@ Clang-Tidy Checks
    `daedalean-switch-statement <daedalean-switch-statement.html>`_,
    `daedalean-ternary-operator-must-not-be-used <daedalean-ternary-operator-must-not-be-used.html>`_,
    `daedalean-type-conversions <daedalean-type-conversions.html>`_,
-   `daedalean-unions-must-not-be-used <daedalean-unions-must-not-be-used.html>`_, "Yes"
+   `daedalean-unions-must-not-be-used <daedalean-unions-must-not-be-used.html>`_,
+   `daedalean-vararg-functions-must-not-be-used <daedalean-vararg-functions-must-not-be-used.html>`_, "Yes"
    `darwin-avoid-spinlock <darwin-avoid-spinlock.html>`_,
    `darwin-dispatch-once-nonstatic <darwin-dispatch-once-nonstatic.html>`_, "Yes"
    `fuchsia-default-arguments-calls <fuchsia-default-arguments-calls.html>`_,
