@@ -29,6 +29,7 @@
 #include "TernaryOperatorMustNotBeUsedCheck.h"
 #include "TypeConversionsCheck.h"
 #include "UnionsMustNotBeUsedCheck.h"
+#include "UseNoexceptCheck.h"
 #include "VarargFunctionsMustNotBeUsedCheck.h"
 
 using namespace clang::ast_matchers;
@@ -83,6 +84,7 @@ public:
         "daedalean-switch-statement");
     CheckFactories.registerCheck<UnionsMustNotBeUsedCheck>(
         "daedalean-unions-must-not-be-used");
+    CheckFactories.registerCheck<UseNoexceptCheck>("daedalean-use-noexcept");
     CheckFactories.registerCheck<VarargFunctionsMustNotBeUsedCheck>(
         "daedalean-vararg-functions-must-not-be-used");
   }

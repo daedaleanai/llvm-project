@@ -271,6 +271,11 @@ New checks
 - New :doc:`daedalean-unions-must-not-be-used
   <clang-tidy/checks/daedalean-unions-must-not-be-used>` check.
 
+  Finds function/method declarations and makes sure they have a noexcept specifier or warns the user.
+
+- New :doc:`daedalean-use-noexcept
+  <clang-tidy/checks/daedalean-use-noexcept>` check.
+
   FIXME: add release notes.
 
 - New :doc:`daedalean-vararg-functions-must-not-be-used
