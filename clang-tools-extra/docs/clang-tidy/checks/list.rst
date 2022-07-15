@@ -190,6 +190,7 @@ Clang-Tidy Checks
    `daedalean-ternary-operator-must-not-be-used <daedalean-ternary-operator-must-not-be-used.html>`_,
    `daedalean-type-conversions <daedalean-type-conversions.html>`_,
    `daedalean-unions-must-not-be-used <daedalean-unions-must-not-be-used.html>`_,
+   `daedalean-use-noexcept <daedalean-use-noexcept.html>`_, "Yes"
    `daedalean-vararg-functions-must-not-be-used <daedalean-vararg-functions-must-not-be-used.html>`_,
    `darwin-avoid-spinlock <darwin-avoid-spinlock.html>`_,
    `darwin-dispatch-once-nonstatic <darwin-dispatch-once-nonstatic.html>`_, "Yes"
@@ -350,7 +351,6 @@ Clang-Tidy Checks
    `readability-uppercase-literal-suffix <readability-uppercase-literal-suffix.html>`_, "Yes"
    `readability-use-anyofallof <readability-use-anyofallof.html>`_,
    `zircon-temporary-objects <zircon-temporary-objects.html>`_,
-
 
 .. csv-table:: Aliases..
    :header: "Name", "Redirect", "Offers fixes"
