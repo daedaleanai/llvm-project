@@ -4,6 +4,7 @@
 
 void f() {
   // CHECK-MESSAGES: [[@LINE-1]]:6: warning: Function 'f' should be in an anonymous namespace [daedalean-local-methods-and-types]
+  int a;
 }
 
 int GlobalVar;
@@ -109,7 +110,7 @@ class GoodC {
   int Var;
   const char *Var2;
 
-  void function();
+  void function() {}
 
   struct InnerS {
     int Var;
@@ -130,6 +131,16 @@ int BadGlobalVar;
 // CHECK-MESSAGES: [[@LINE-1]]:5: warning: Variable 'BadGlobalVar' should be in an anonymous namespace [daedalean-local-methods-and-types]
 
 void GoodS::function() {
+  int a = 3;
+  auto lambda = [&val = a]() {
+    int i = val;
+    [&val = i]() {
+      int i = val;
+      return i;
+    }();
+    return i;
+  };
+  lambda();
 }
 
 } // namespace local::methods::plus::types

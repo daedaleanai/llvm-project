@@ -20,20 +20,23 @@ namespace daedalean {
 
 void LocalMethodsAndTypesCheck::registerMatchers(MatchFinder *Finder) {
   Finder->addMatcher(
-      functionDecl(unless(anyOf(hasAncestor(namespaceDecl(isAnonymous())),
-                                hasAncestor(recordDecl()))))
+      functionDecl(
+          unless(anyOf(hasAncestor(namespaceDecl(isAnonymous())),
+                       hasAncestor(functionDecl()), hasAncestor(recordDecl()))))
           .bind("Function"),
       this);
 
   Finder->addMatcher(
       varDecl(unless(anyOf(hasAncestor(namespaceDecl(isAnonymous())),
+                           hasAncestor(functionDecl()),
                            hasAncestor(recordDecl()), parmVarDecl())))
           .bind("Variable"),
       this);
 
   Finder->addMatcher(
-      recordDecl(unless(anyOf(hasAncestor(namespaceDecl(isAnonymous())),
-                              hasAncestor(recordDecl()))))
+      recordDecl(
+          unless(anyOf(hasAncestor(namespaceDecl(isAnonymous())),
+                       hasAncestor(functionDecl()), hasAncestor(recordDecl()))))
           .bind("Record"),
       this);
 }
