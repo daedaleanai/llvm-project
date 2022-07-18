@@ -20,6 +20,7 @@
 #include "FriendDeclarationsCheck.h"
 #include "IncludeOrderCheck.h"
 #include "LambdaImplicitCaptureCheck.h"
+#include "LocalMethodsAndTypesCheck.h"
 #include "OperatorOverloadingCheck.h"
 #include "PreprocessingDirectivesCheck.h"
 #include "ProtectedMustNotBeUsedCheck.h"
@@ -50,6 +51,8 @@ public:
         "daedalean-comma-operator-must-not-be-used");
     CheckFactories.registerCheck<DerivedClassesCheck>(
         "daedalean-derived-classes");
+    CheckFactories.registerCheck<LocalMethodsAndTypesCheck>(
+        "daedalean-local-methods-and-types");
     CheckFactories.registerCheck<TypeConversionsCheck>(
         "daedalean-type-conversions");
     CheckFactories.registerCheck<LambdaReturnTypeCheck>(
