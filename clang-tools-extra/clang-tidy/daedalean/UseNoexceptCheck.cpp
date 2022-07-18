@@ -35,21 +35,22 @@ void UseNoexceptCheck::registerMatchers(MatchFinder *Finder) {
 
 void UseNoexceptCheck::check(const MatchFinder::MatchResult &Result) {
   if (const auto *MatchedDecl =
-          Result.Nodes.getNodeAs<FunctionDecl>("function")) {
+          Result.Nodes.getNodeAs<FunctionDecl>("function");
+      MatchedDecl && MatchedDecl->getLocation().isValid()) {
     diag(MatchedDecl->getLocation(), "Function %0 should be noexcept")
         << MatchedDecl;
     diag(MatchedDecl->getLocation(), "insert 'noexcept'", DiagnosticIDs::Note);
   }
 
-  if (const auto *MatchedDecl =
-          Result.Nodes.getNodeAs<CXXMethodDecl>("method")) {
+  if (const auto *MatchedDecl = Result.Nodes.getNodeAs<CXXMethodDecl>("method");
+      MatchedDecl && MatchedDecl->getLocation().isValid()) {
     diag(MatchedDecl->getLocation(), "Method %0 should be noexcept")
         << MatchedDecl;
     diag(MatchedDecl->getLocation(), "insert 'noexcept'", DiagnosticIDs::Note);
   }
 
-  if (const auto *MatchedDecl =
-          Result.Nodes.getNodeAs<CXXMethodDecl>("lambda")) {
+  if (const auto *MatchedDecl = Result.Nodes.getNodeAs<CXXMethodDecl>("lambda");
+      MatchedDecl && MatchedDecl->getLocation().isValid()) {
     diag(MatchedDecl->getLocation(), "Lambda should be noexcept");
     diag(MatchedDecl->getLocation(), "insert 'noexcept'", DiagnosticIDs::Note);
   }
