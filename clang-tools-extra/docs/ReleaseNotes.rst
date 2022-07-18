@@ -259,6 +259,12 @@ New checks
   Finds virtual classes whose destructor is neither public and virtual nor
   protected and non-virtual.
 
+- New :doc:`daedalean-local-methods-and-types
+  <clang-tidy/checks/daedalean-local-methods-and-types>` check.
+
+  Looks for local methods and types that should be part of an anonymous
+  namespace and warns the user.
+
 - New :doc:`daedalean-type-conversions
   <clang-tidy/checks/daedalean-type-conversions>` check.
 

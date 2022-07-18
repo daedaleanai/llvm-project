@@ -181,6 +181,7 @@ Clang-Tidy Checks
    `daedalean-include-order <daedalean-include-order.html>`_, "Yes"
    `daedalean-lambda-implicit-capture <daedalean-lambda-implicit-capture.html>`_,
    `daedalean-lambda-return-type <daedalean-lambda-return-type.html>`_, "Yes"
+   `daedalean-local-methods-and-types <daedalean-local-methods-and-types.html>`_, "Yes"
    `daedalean-operator-overloading <daedalean-operator-overloading.html>`_,
    `daedalean-preprocessing-directives <daedalean-preprocessing-directives.html>`_,
    `daedalean-protected-must-not-be-used <daedalean-protected-must-not-be-used.html>`_,
@@ -189,7 +190,7 @@ Clang-Tidy Checks
    `daedalean-ternary-operator-must-not-be-used <daedalean-ternary-operator-must-not-be-used.html>`_,
    `daedalean-type-conversions <daedalean-type-conversions.html>`_,
    `daedalean-unions-must-not-be-used <daedalean-unions-must-not-be-used.html>`_,
-   `daedalean-vararg-functions-must-not-be-used <daedalean-vararg-functions-must-not-be-used.html>`_, "Yes"
+   `daedalean-vararg-functions-must-not-be-used <daedalean-vararg-functions-must-not-be-used.html>`_,
    `darwin-avoid-spinlock <darwin-avoid-spinlock.html>`_,
    `darwin-dispatch-once-nonstatic <darwin-dispatch-once-nonstatic.html>`_, "Yes"
    `fuchsia-default-arguments-calls <fuchsia-default-arguments-calls.html>`_,
@@ -349,6 +350,7 @@ Clang-Tidy Checks
    `readability-uppercase-literal-suffix <readability-uppercase-literal-suffix.html>`_, "Yes"
    `readability-use-anyofallof <readability-use-anyofallof.html>`_,
    `zircon-temporary-objects <zircon-temporary-objects.html>`_,
+
 
 .. csv-table:: Aliases..
    :header: "Name", "Redirect", "Offers fixes"
