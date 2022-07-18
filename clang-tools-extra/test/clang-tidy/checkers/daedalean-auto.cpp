@@ -56,11 +56,13 @@ void function() {
   auto lambda = []() -> void {};
 
   // auto MAY be used as return of lambda functions with auto arguments.
-  auto anotherLambda = [](auto x) -> auto{
+  auto anotherLambda = [lambda](auto x) -> auto{
     return x * 2;
   };
 
-  anotherLambda(3);
+  auto yetAnotherLambda = [lambda](auto x) -> bool {
+    return x != 0;
+  };
 
   auto badLambda = [](int x) -> auto{
     // CHECK-MESSAGES: :[[@LINE-1]]:20: warning: Lambda with non-auto arguments MUST not use auto as return type [daedalean-auto]
@@ -102,4 +104,25 @@ concept Eq = requires(T t1, T t2) {
   {t1 == t2};
 };
 
-void testFunc(Eq auto val);
+void testFunc(Eq auto val) {
+  [value = val](decltype(val) val) -> bool {
+    return value == val;
+  }(val);
+}
+
+template <typename T>
+void templatedFunc(T val) {
+  [value = val](decltype(val) val) -> auto{
+    // CHECK-MESSAGES: :[[@LINE-1]]:3: warning: Lambda with non-auto arguments MUST not use auto as return type [daedalean-auto]
+    auto variable = val;
+    // CHECK-MESSAGES: :[[@LINE-1]]:10: warning: Do not declare auto variables [daedalean-auto]
+    return value == variable;
+  }
+  (val);
+
+  [val](decltype(val) value) -> bool {
+    auto variable = value;
+    // CHECK-MESSAGES: :[[@LINE-1]]:10: warning: Do not declare auto variables [daedalean-auto]
+    return val == variable;
+  }(val);
+}

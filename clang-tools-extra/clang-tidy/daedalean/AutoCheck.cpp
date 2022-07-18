@@ -29,10 +29,10 @@ void AutoCheck::registerMatchers(MatchFinder *Finder) {
       anyOf(hasType(autoType()), hasType(references(autoType())),
             hasType(pointsTo(autoType())),
             allOf(hasType(templateTypeParmType()), hasType(asString("auto"))));
-  Finder->addMatcher(
-      traverse(TK_IgnoreUnlessSpelledInSource, varDecl(hasAutoType))
-          .bind("variable-decl"),
-      this);
+  Finder->addMatcher(traverse(TK_IgnoreUnlessSpelledInSource,
+                              varDecl(hasAutoType, unless(isInitCapture())))
+                         .bind("variable-decl"),
+                     this);
   Finder->addMatcher(
       functionDecl(returns(autoType()), unless(hasTrailingReturn()))
           .bind("function-return"),
@@ -47,10 +47,10 @@ void AutoCheck::check(const MatchFinder::MatchResult &Result) {
 
     // Check if it is a parameter part of a method, part of a closure record
     // representing a lambda
-    if (const ParmVarDecl *paramVarDecl =
+    if (const ParmVarDecl *parmVarDecl =
             llvm::dyn_cast<ParmVarDecl>(MatchedDecl)) {
       if (const CXXMethodDecl *method = llvm::dyn_cast<CXXMethodDecl>(
-              paramVarDecl->getParentFunctionOrMethod())) {
+              parmVarDecl->getParentFunctionOrMethod())) {
         if (method->getParent()->isLambda()) {
           // auto lambda parameters are allowed
           return;
@@ -60,13 +60,17 @@ void AutoCheck::check(const MatchFinder::MatchResult &Result) {
 
     if (auto *autoType = llvm::dyn_cast<AutoType>(MatchedDecl->getType())) {
       // Check if the auto variable contains a lambda
-      if (auto *recordType =
-              llvm::dyn_cast<RecordType>(autoType->getDeducedType())) {
-        if (CXXRecordDecl *recordDecl =
-                dyn_cast<CXXRecordDecl>(recordType->getDecl());
-            recordDecl && recordDecl->isLambda()) {
-          // It is an auto variable containing a lambda
-          return;
+      if (autoType->isDeduced()) {
+        if (QualType deducedType = autoType->getDeducedType();
+            !deducedType.isNull()) {
+          if (auto *recordType = llvm::dyn_cast<RecordType>(deducedType)) {
+            if (CXXRecordDecl *recordDecl =
+                    dyn_cast<CXXRecordDecl>(recordType->getDecl());
+                recordDecl && recordDecl->isLambda()) {
+              // It is an auto variable containing a lambda
+              return;
+            }
+          }
         }
       }
 
@@ -76,7 +80,9 @@ void AutoCheck::check(const MatchFinder::MatchResult &Result) {
         return;
       }
 
-      actualType = MatchedDecl->getType().getAsString();
+      if (MatchedDecl->getType().getAsString() != "auto") {
+        actualType = MatchedDecl->getType().getAsString();
+      }
     }
 
     diag(MatchedDecl->getLocation(), "Do not declare auto variables");
@@ -150,9 +156,11 @@ void AutoCheck::check(const MatchFinder::MatchResult &Result) {
            "Lambda with non-auto arguments MUST not use auto as return type");
 
       if (auto *autoType = llvm::dyn_cast<AutoType>(returnType)) {
-        diag(MatchedDecl->getLocation(), "Use actual type %0",
-             DiagnosticIDs::Note)
-            << returnType;
+        if (returnType.getAsString() != "auto") {
+          diag(MatchedDecl->getLocation(), "Use actual type %0",
+               DiagnosticIDs::Note)
+              << returnType;
+        }
       }
     }
   }
