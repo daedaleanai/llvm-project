@@ -265,6 +265,12 @@ New checks
   Looks for local methods and types that should be part of an anonymous
   namespace and warns the user.
 
+- New :doc:`daedalean-template-specializations
+  <clang-tidy/checks/daedalean-template-specializations>` check.
+
+  Looks for template specializations for templates with default
+  implementations and checks that they are defined in the same file.
+
 - New :doc:`daedalean-type-conversions
   <clang-tidy/checks/daedalean-type-conversions>` check.
 
