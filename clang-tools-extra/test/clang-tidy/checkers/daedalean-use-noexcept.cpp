@@ -1,4 +1,4 @@
-// RUN: %check_clang_tidy %s daedalean-use-noexcept %t
+// RUN: %check_clang_tidy %s daedalean-use-noexcept %t -std c++20
 
 class S {
 public:
@@ -26,3 +26,15 @@ void func() noexcept {
     // CHECK-MESSAGES: :[[@LINE-1]]:17: warning: Lambda should be noexcept [daedalean-use-noexcept]
   };
 }
+
+template <typename T>
+class Wrapper {
+};
+
+template <typename T>
+class MoreWrappers {
+  MoreWrappers(Wrapper<T>) noexcept;
+};
+
+template <typename T>
+MoreWrappers(Wrapper<T>) -> MoreWrappers<T>;
