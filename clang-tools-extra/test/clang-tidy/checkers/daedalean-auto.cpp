@@ -21,9 +21,35 @@ struct vector {
   iter end();
 };
 
+template <class T>
+constexpr auto dependsOnTemplateParam(T &val) {
+  auto &[a, b, c] = val;
+  return a;
+}
+
+template <class T>
+constexpr auto doesNotDependOnTemplateParam(T) {
+  // CHECK-MESSAGES: :[[@LINE-1]]:16: warning: Do not use auto as return type [daedalean-auto]
+  int a = 1;
+  return a;
+}
+
+template <typename F>
+void templateFuncContainsLambda() {
+  static const auto var = [](void (*parm)()) -> void { parm(); };
+}
+
 void function() {
   vector<int> Vector{};
   vector<int *> Vector2{};
+
+  struct {
+    char c;
+    char k;
+    char j;
+  } struct_value;
+  dependsOnTemplateParam(struct_value);
+  doesNotDependOnTemplateParam<char>('c');
 
   auto i = 123u;
   // CHECK-MESSAGES: :[[@LINE-1]]:8: warning: Do not declare auto variables [daedalean-auto]
