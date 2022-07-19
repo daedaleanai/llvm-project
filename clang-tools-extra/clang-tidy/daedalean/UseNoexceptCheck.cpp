@@ -21,17 +21,20 @@ void UseNoexceptCheck::registerMatchers(MatchFinder *Finder) {
   auto isPartOfLambda = cxxMethodDecl(ofClass(isLambda()));
   Finder->addMatcher(
       functionDecl(unless(anyOf(isNoThrow(), isPartOfLambda, cxxMethodDecl(),
+                                ast_matchers::isTemplateInstantiation(),
                                 isDeleted(), cxxDeductionGuideDecl())))
           .bind("function"),
       this);
   Finder->addMatcher(
       cxxMethodDecl(unless(anyOf(isNoThrow(), isPartOfLambda, isDeleted(),
+                                 ast_matchers::isTemplateInstantiation(),
                                  cxxDeductionGuideDecl())))
           .bind("method"),
       this);
   Finder->addMatcher(
       cxxMethodDecl(allOf(ofClass(isLambda()), hasOverloadedOperatorName("()")),
-                    unless(anyOf(isNoThrow(), isDeleted())))
+                    unless(anyOf(isNoThrow(), isDeleted(),
+                                 ast_matchers::isTemplateInstantiation())))
           .bind("lambda"),
       this);
 }
@@ -40,6 +43,14 @@ void UseNoexceptCheck::check(const MatchFinder::MatchResult &Result) {
   if (const auto *MatchedDecl =
           Result.Nodes.getNodeAs<FunctionDecl>("function");
       MatchedDecl && MatchedDecl->getLocation().isValid()) {
+    DeclarationName name = MatchedDecl->getDeclName();
+    if (name.isIdentifier()) {
+      std::string nameStr{name.getAsString()};
+      llvm::StringRef nameRef{nameStr};
+      if (nameRef.startswith("__builtin") || nameRef.startswith("__atomic")) {
+        return;
+      }
+    }
     diag(MatchedDecl->getLocation(), "Function %0 should be noexcept")
         << MatchedDecl;
     diag(MatchedDecl->getLocation(), "insert 'noexcept'", DiagnosticIDs::Note);
