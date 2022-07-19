@@ -22,12 +22,14 @@ void LocalMethodsAndTypesCheck::registerMatchers(MatchFinder *Finder) {
   Finder->addMatcher(
       functionDecl(
           unless(anyOf(hasAncestor(namespaceDecl(isAnonymous())),
+                       isExplicitTemplateSpecialization(), isExternC(),
                        hasAncestor(functionDecl()), hasAncestor(recordDecl()))))
           .bind("Function"),
       this);
 
   Finder->addMatcher(
       varDecl(unless(anyOf(hasAncestor(namespaceDecl(isAnonymous())),
+                           isExplicitTemplateSpecialization(), isExternC(),
                            hasAncestor(functionDecl()),
                            hasAncestor(recordDecl()), parmVarDecl())))
           .bind("Variable"),
@@ -36,6 +38,7 @@ void LocalMethodsAndTypesCheck::registerMatchers(MatchFinder *Finder) {
   Finder->addMatcher(
       recordDecl(
           unless(anyOf(hasAncestor(namespaceDecl(isAnonymous())),
+                       cxxRecordDecl(isExplicitTemplateSpecialization()),
                        hasAncestor(functionDecl()), hasAncestor(recordDecl()))))
           .bind("Record"),
       this);
