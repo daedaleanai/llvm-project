@@ -21,16 +21,17 @@ void UseNoexceptCheck::registerMatchers(MatchFinder *Finder) {
   auto isPartOfLambda = cxxMethodDecl(ofClass(isLambda()));
   Finder->addMatcher(
       functionDecl(unless(anyOf(isNoThrow(), isPartOfLambda, cxxMethodDecl(),
-                                cxxDeductionGuideDecl())))
+                                isDeleted(), cxxDeductionGuideDecl())))
           .bind("function"),
       this);
-  Finder->addMatcher(cxxMethodDecl(unless(anyOf(isNoThrow(), isPartOfLambda,
-                                                cxxDeductionGuideDecl())))
-                         .bind("method"),
-                     this);
+  Finder->addMatcher(
+      cxxMethodDecl(unless(anyOf(isNoThrow(), isPartOfLambda, isDeleted(),
+                                 cxxDeductionGuideDecl())))
+          .bind("method"),
+      this);
   Finder->addMatcher(
       cxxMethodDecl(allOf(ofClass(isLambda()), hasOverloadedOperatorName("()")),
-                    unless(isNoThrow()))
+                    unless(anyOf(isNoThrow(), isDeleted())))
           .bind("lambda"),
       this);
 }

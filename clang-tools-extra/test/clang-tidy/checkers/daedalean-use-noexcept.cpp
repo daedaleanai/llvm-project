@@ -34,6 +34,7 @@ class Wrapper {
 template <typename T>
 class MoreWrappers {
   MoreWrappers(Wrapper<T>) noexcept;
+  MoreWrappers() = delete;
 };
 
 template <typename T>
