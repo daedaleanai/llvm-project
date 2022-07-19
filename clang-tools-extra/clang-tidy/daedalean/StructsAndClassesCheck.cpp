@@ -48,8 +48,23 @@ StructsAndClassesCheck::shouldBeAClass(const CXXRecordDecl *record) {
       // Constructors are ignored
       continue;
     }
+    const bool isDestructor = llvm::isa<CXXDestructorDecl>(method);
+    if (isDestructor) {
+      auto *destructor = llvm::cast<CXXDestructorDecl>(method);
+      if (!destructor->isUserProvided()) {
+        // If not defined by the user, ignore it
+        continue;
+      }
+    }
 
     if (method->isStatic()) {
+      continue;
+    }
+
+    if (method->isCopyAssignmentOperator() && !method->isUserProvided()) {
+      continue;
+    }
+    if (method->isMoveAssignmentOperator() && !method->isUserProvided()) {
       continue;
     }
 

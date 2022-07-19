@@ -1,5 +1,16 @@
 // RUN: %check_clang_tidy %s daedalean-structs-and-classes %t
 
+class ClassInsideStruct {
+  ~ClassInsideStruct();
+};
+
+struct S final {
+  int f1;
+  int f2;
+  int f3;
+  ClassInsideStruct c;
+};
+
 struct S1 {
   int a;
 };
