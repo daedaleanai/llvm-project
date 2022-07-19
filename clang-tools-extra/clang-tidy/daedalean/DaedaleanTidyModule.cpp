@@ -26,6 +26,7 @@
 #include "ProtectedMustNotBeUsedCheck.h"
 #include "StructsAndClassesCheck.h"
 #include "SwitchStatementCheck.h"
+#include "TemplateSpecializationsCheck.h"
 #include "TernaryOperatorMustNotBeUsedCheck.h"
 #include "TypeConversionsCheck.h"
 #include "UnionsMustNotBeUsedCheck.h"
@@ -54,6 +55,8 @@ public:
         "daedalean-derived-classes");
     CheckFactories.registerCheck<LocalMethodsAndTypesCheck>(
         "daedalean-local-methods-and-types");
+    CheckFactories.registerCheck<TemplateSpecializationsCheck>(
+        "daedalean-template-specializations");
     CheckFactories.registerCheck<TypeConversionsCheck>(
         "daedalean-type-conversions");
     CheckFactories.registerCheck<LambdaReturnTypeCheck>(
