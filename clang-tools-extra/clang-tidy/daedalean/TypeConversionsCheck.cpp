@@ -22,10 +22,18 @@ const char ConstCastId[] = "const-cast";
 const char CStyleCastId[] = "c-style-cast";
 
 void TypeConversionsCheck::registerMatchers(MatchFinder *Finder) {
-  Finder->addMatcher(cxxDynamicCastExpr().bind(DynamicCastId), this);
-  Finder->addMatcher(cxxReinterpretCastExpr().bind(ReinterpretCastId), this);
-  Finder->addMatcher(cxxConstCastExpr().bind(ConstCastId), this);
-  Finder->addMatcher(cStyleCastExpr().bind(CStyleCastId), this);
+  Finder->addMatcher(traverse(TK_IgnoreUnlessSpelledInSource,
+                              cxxDynamicCastExpr().bind(DynamicCastId)),
+                     this);
+  Finder->addMatcher(traverse(TK_IgnoreUnlessSpelledInSource,
+                              cxxReinterpretCastExpr().bind(ReinterpretCastId)),
+                     this);
+  Finder->addMatcher(traverse(TK_IgnoreUnlessSpelledInSource,
+                              cxxConstCastExpr().bind(ConstCastId)),
+                     this);
+  Finder->addMatcher(traverse(TK_IgnoreUnlessSpelledInSource,
+                              cStyleCastExpr().bind(CStyleCastId)),
+                     this);
 }
 
 void TypeConversionsCheck::check(const MatchFinder::MatchResult &Result) {
