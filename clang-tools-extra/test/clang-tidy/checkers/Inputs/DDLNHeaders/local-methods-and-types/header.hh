@@ -26,4 +26,7 @@ class GoodC;
 
 extern int GoodGlobalVar;
 
+template <typename T>
+class TemplatedClass;
+
 } // namespace local::methods::plus::types
