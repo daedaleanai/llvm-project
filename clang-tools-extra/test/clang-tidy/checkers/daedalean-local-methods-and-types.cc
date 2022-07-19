@@ -132,4 +132,11 @@ int BadGlobalVar;
 void GoodS::function() {
 }
 
+template <>
+class TemplatedClass<int>;
+
 } // namespace local::methods::plus::types
+
+extern "C" {
+void cFunction() {}
+}
