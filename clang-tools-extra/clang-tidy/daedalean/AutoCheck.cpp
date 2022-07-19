@@ -16,10 +16,49 @@ namespace clang {
 namespace tidy {
 namespace daedalean {
 
+namespace {
+bool checkIsDependent(Stmt *stmt) {
+  if (!stmt) {
+    return false;
+  }
+
+  if (const auto ptr = llvm::dyn_cast<ForStmt>(stmt); ptr) {
+    return checkIsDependent(ptr->getBody());
+  }
+  if (const auto ptr = llvm::dyn_cast<WhileStmt>(stmt); ptr) {
+    return checkIsDependent(ptr->getBody());
+  }
+  if (const auto ptr = llvm::dyn_cast<DoStmt>(stmt); ptr) {
+    return checkIsDependent(ptr->getBody());
+  }
+  if (const auto ptr = llvm::dyn_cast<IfStmt>(stmt); ptr) {
+    if (checkIsDependent(ptr->getThen())) {
+      return true;
+    }
+    return checkIsDependent(ptr->getElse());
+  }
+  if (const auto ptr = llvm::dyn_cast<CompoundStmt>(stmt); ptr) {
+    for (const auto s : ptr->body()) {
+      if (checkIsDependent(s)) {
+        return true;
+      }
+    }
+  }
+
+  if (const auto ptr = llvm::dyn_cast<ReturnStmt>(stmt); ptr) {
+    const auto expr = ptr->getRetValue();
+    return expr->getType()->isDependentType();
+  }
+
+  return false;
+}
+} // namespace
+
 void AutoCheck::registerMatchers(MatchFinder *Finder) {
-  // We register 3 matchers separately:
+  // We register 4 matchers separately:
   //  - Variable declarations (which includes parameters)
   //  - Function declarations (to check return types)
+  //  - Template Function declarations (to check return types)
   //  - Lambdas (which are handled separately given they have slightly different
   //  rules).
 
@@ -29,14 +68,21 @@ void AutoCheck::registerMatchers(MatchFinder *Finder) {
       anyOf(hasType(autoType()), hasType(references(autoType())),
             hasType(pointsTo(autoType())),
             allOf(hasType(templateTypeParmType()), hasType(asString("auto"))));
-  Finder->addMatcher(traverse(TK_IgnoreUnlessSpelledInSource,
-                              varDecl(hasAutoType, unless(isInitCapture())))
-                         .bind("variable-decl"),
-                     this);
   Finder->addMatcher(
-      functionDecl(returns(autoType()), unless(hasTrailingReturn()))
+      traverse(TK_IgnoreUnlessSpelledInSource,
+               varDecl(hasAutoType,
+                       unless(anyOf(isInitCapture(), decompositionDecl(),
+                                    hasInitializer(expr(lambdaExpr()))))))
+          .bind("variable-decl"),
+      this);
+  Finder->addMatcher(
+      functionDecl(returns(autoType()),
+                   unless(anyOf(hasTrailingReturn(),
+                                ast_matchers::isTemplateInstantiation())))
           .bind("function-return"),
       this);
+  Finder->addMatcher(functionTemplateDecl().bind("function-template-return"),
+                     this);
   Finder->addMatcher(cxxRecordDecl(isLambda()).bind("lambda"), this);
 }
 
@@ -80,7 +126,7 @@ void AutoCheck::check(const MatchFinder::MatchResult &Result) {
         return;
       }
 
-      if (MatchedDecl->getType().getAsString() != "auto") {
+      if (MatchedDecl->getType().getUnqualifiedType().getAsString() != "auto") {
         actualType = MatchedDecl->getType().getAsString();
       }
     }
@@ -94,6 +140,7 @@ void AutoCheck::check(const MatchFinder::MatchResult &Result) {
       diag(MatchedDecl->getLocation(), "Use actual type", DiagnosticIDs::Note)
           << FixItHint::CreateReplacement(range, actualType);
     }
+    return;
   }
 
   if (const auto *MatchedDecl =
@@ -106,7 +153,7 @@ void AutoCheck::check(const MatchFinder::MatchResult &Result) {
       }
     }
 
-    // Check if there are dependent template parametes in the output
+    // Check if there are dependent template parameters in the output
     QualType returnType = MatchedDecl->getReturnType();
     if (returnType->isDependentType() || returnType->isUndeducedType()) {
       // auto MAY be used in template functions if type depends on template
@@ -114,8 +161,7 @@ void AutoCheck::check(const MatchFinder::MatchResult &Result) {
       return;
     }
 
-    diag(MatchedDecl->getLocation(), "Do not use auto as return type")
-        << MatchedDecl;
+    diag(MatchedDecl->getLocation(), "Do not use auto as return type");
 
     if (auto *autoType =
             llvm::dyn_cast<AutoType>(MatchedDecl->getReturnType())) {
@@ -126,6 +172,7 @@ void AutoCheck::check(const MatchFinder::MatchResult &Result) {
           << FixItHint::CreateReplacement(
                  range, MatchedDecl->getReturnType().getAsString());
     }
+    return;
   }
 
   if (const auto *MatchedDecl =
@@ -136,7 +183,8 @@ void AutoCheck::check(const MatchFinder::MatchResult &Result) {
       auto type = param->getType();
       // Clang can decude auto params as templated type params with name
       // "auto"
-      if ((type->isTemplateTypeParmType() && (type.getAsString() == "auto")) ||
+      if ((type->isTemplateTypeParmType() &&
+           (type.getUnqualifiedType().getAsString() == "auto")) ||
           type->isUndeducedAutoType() || llvm::isa<AutoType>(*type)) {
         hasAutoParam = true;
       }
@@ -146,7 +194,7 @@ void AutoCheck::check(const MatchFinder::MatchResult &Result) {
 
     // Clang can dedude auto params as templated type params with name "auto"
     if ((returnType->isTemplateTypeParmType() &&
-         (returnType.getAsString() == "auto")) ||
+         (returnType.getUnqualifiedType().getAsString() == "auto")) ||
         returnType->isUndeducedAutoType() || llvm::isa<AutoType>(*returnType)) {
       if (hasAutoParam) {
         return;
@@ -156,13 +204,43 @@ void AutoCheck::check(const MatchFinder::MatchResult &Result) {
            "Lambda with non-auto arguments MUST not use auto as return type");
 
       if (auto *autoType = llvm::dyn_cast<AutoType>(returnType)) {
-        if (returnType.getAsString() != "auto") {
+        if (returnType.getUnqualifiedType().getAsString() != "auto") {
           diag(MatchedDecl->getLocation(), "Use actual type %0",
                DiagnosticIDs::Note)
               << returnType;
         }
       }
     }
+    return;
+  }
+
+  if (const auto *MatchedDecl = Result.Nodes.getNodeAs<FunctionTemplateDecl>(
+          "function-template-return")) {
+
+    const FunctionDecl *Function = MatchedDecl->getAsFunction();
+    if (const CXXMethodDecl *method = llvm::dyn_cast<CXXMethodDecl>(Function)) {
+      if (method->getOverloadedOperator() == OO_Call) {
+        if (const CXXRecordDecl *record = method->getParent()) {
+          if (record->isLambda()) {
+            // Handled separately
+            return;
+          }
+        }
+      }
+    }
+
+    QualType ReturnType = Function->getReturnType();
+    if (!ReturnType->isUndeducedAutoType()) {
+      return;
+    }
+
+    if (ReturnType->isDependentType() &&
+        checkIsDependent(Function->getBody())) {
+      return;
+    }
+
+    diag(MatchedDecl->getLocation(), "Do not use auto as return type");
+    return;
   }
 }
 
