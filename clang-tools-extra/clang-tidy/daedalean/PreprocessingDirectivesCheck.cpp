@@ -71,8 +71,10 @@ public:
   virtual void MacroUndefined(const Token &MacroNameTok,
                               const MacroDefinition &MD,
                               const MacroDirective *Undef) override {
-    Check.diag(Undef->getLocation(),
-               "Preprocessor directives must not be used");
+    if (Undef) {
+      Check.diag(Undef->getLocation(),
+                 "Preprocessor directives must not be used");
+    }
   }
 
   virtual void If(SourceLocation Loc, SourceRange ConditionRange,
