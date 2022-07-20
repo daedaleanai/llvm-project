@@ -11,6 +11,11 @@
 #include "clang/ASTMatchers/ASTMatchFinder.h"
 #include "clang/Lex/PPCallbacks.h"
 #include "clang/Lex/Preprocessor.h"
+#include "llvm/ADT/None.h"
+#include "llvm/ADT/Optional.h"
+#include "llvm/Support/Debug.h"
+
+#define DEBUG_TYPE "daedalean-include-order"
 
 using namespace clang::ast_matchers;
 
@@ -50,11 +55,11 @@ private:
     GroupType groupType;
     std::string project;
 
-    bool operator <(const IncludeDirective & other) const {
+    bool operator<(const IncludeDirective &other) const {
       if (groupType != other.groupType) {
         return static_cast<int>(groupType) < static_cast<int>(other.groupType);
       }
-      return  Filename < other.Filename;
+      return Filename < other.Filename;
     }
   };
 
@@ -65,10 +70,11 @@ private:
   const SourceManager &SM;
 
 private:
-  void printInverse(const IncludeDirective & what, const IncludeDirective & beforeWhat);
+  void printInverse(const IncludeDirective &what,
+                    const IncludeDirective &beforeWhat);
 };
 
-std::string basename(const std::string & path) {
+std::string basename(const std::string &path) {
   if (const size_t pos = path.find_last_of('/'); pos == std::string::npos) {
     return path;
   } else {
@@ -76,13 +82,38 @@ std::string basename(const std::string & path) {
   }
 }
 
-std::string ext(const std::string & path) {
+std::string ext(const std::string &path) {
   const std::string name = basename(path);
   if (const size_t pos = name.find_last_of("."); pos == std::string::npos) {
     return "";
   } else {
     return name.substr(pos);
   }
+}
+
+llvm::Optional<std::string> getPathInProject(StringRef fileSystemPath) {
+  constexpr static StringRef SourceDir = "src";
+  constexpr static StringRef IncludeDir = "include";
+
+  auto pos = fileSystemPath.rfind(SourceDir);
+  if (pos != fileSystemPath.npos) {
+    return fileSystemPath.substr(pos + SourceDir.size() + 1).str();
+  }
+
+  pos = fileSystemPath.rfind(IncludeDir);
+  if (pos != fileSystemPath.npos) {
+    return fileSystemPath.substr(pos + IncludeDir.size() + 1).str();
+  }
+
+  return llvm::Optional<std::string>{llvm::NoneType{}};
+}
+
+std::string projectForPathInProject(StringRef pathInProject) {
+  size_t pos = pathInProject.find_first_of("/");
+  if (pos != pathInProject.npos) {
+    return pathInProject.substr(0, pos).str();
+  }
+  return pathInProject.str();
 }
 
 } // namespace
@@ -93,7 +124,6 @@ void IncludeOrderCheck::registerPPCallbacks(const SourceManager &SM,
   PP->addPPCallbacks(::std::make_unique<IncludeOrderPPCallbacks>(*this, SM));
 }
 
-
 void IncludeOrderPPCallbacks::InclusionDirective(
     SourceLocation HashLoc, const Token &IncludeTok, StringRef FileName,
     bool IsAngled, CharSourceRange FilenameRange, const FileEntry *File,
@@ -101,53 +131,95 @@ void IncludeOrderPPCallbacks::InclusionDirective(
     SrcMgr::CharacteristicKind FileType) {
 
   if (!File) {
-    Check.diag(FilenameRange.getBegin(), "Include <" + FileName.str() + "> not resolved");
+    Check.diag(FilenameRange.getBegin(),
+               "Include <" + FileName.str() + "> not resolved",
+               DiagnosticIDs::Error);
     return;
   }
 
   if (!IsAngled) {
-    Check.diag(FilenameRange.getBegin(), "Use #include<> instead of include \"\"") << FixItHint::CreateReplacement(FilenameRange, "<" + FileName.str() + ">");
+    Check.diag(FilenameRange.getBegin(),
+               "Use #include<> instead of include \"\"")
+        << FixItHint::CreateReplacement(FilenameRange,
+                                        "<" + FileName.str() + ">");
   }
 
-  const std::string fileName(FileName);
-  const std::string project = fileName.substr(0, fileName.find_first_of('/'));
-  const std::string fileExt = ext(fileName);
-  if (fileExt != ".hh" && fileExt != ".h") {
-    Check.diag(FilenameRange.getBegin(), "Only header files (.h, .hh) should be included");
+  const std::string FileNameStr(FileName);
+  LLVM_DEBUG(llvm::dbgs() << "Parsing included file #include <" << FileNameStr
+                          << ">\n");
+
+  const std::string Project =
+      FileNameStr.substr(0, FileNameStr.find_first_of('/'));
+  LLVM_DEBUG(llvm::dbgs() << "\tProject:\t" << Project << "\n");
+
+  const std::string FileExt = ext(FileNameStr);
+  LLVM_DEBUG(llvm::dbgs() << "\tExtension:\t" << FileExt << "\n");
+
+  if (FileExt != ".hh" && FileExt != ".h") {
+    Check.diag(FilenameRange.getBegin(),
+               "Only header files (.h, .hh) should be included");
+    LLVM_DEBUG(llvm::dbgs() << "Invalid extension\n");
   }
 
-  const std::string currentDir = SM.getFileManager().getCanonicalName(SM.getFileEntryForID(SM.getFileID(HashLoc))->getDir()).str();
-  const std::string includeDir = SM.getFileManager().getCanonicalName(File->getDir()).str();
+  const std::string CurrentDir =
+      SM.getFileManager()
+          .getCanonicalName(
+              SM.getFileEntryForID(SM.getFileID(HashLoc))->getDir())
+          .str();
+  LLVM_DEBUG(llvm::dbgs() << "\tpwd:\t" << CurrentDir << "\n");
 
-  const size_t prefixSize = includeDir.find(project) + project.length() + 1;
+  const std::string IncludeDir =
+      SM.getFileManager().getCanonicalName(File->getDir()).str();
+  LLVM_DEBUG(llvm::dbgs() << "\tincludeDir:\t" << IncludeDir << "\n");
 
-  GroupType groupType = GroupType::External;
+  GroupType GroupType = GroupType::External;
 
-  if (currentDir == includeDir) {
-    groupType = GroupType::SameDirectory;
+  auto CurrentDirInProject = getPathInProject(CurrentDir);
+  LLVM_DEBUG(llvm::dbgs() << "\tpwdInProj:\t" << CurrentDirInProject << "\n");
+  auto IncludeDirInProject = getPathInProject(IncludeDir);
+  LLVM_DEBUG(llvm::dbgs() << "\tincludeInProj:\t" << IncludeDirInProject
+                          << "\n");
 
-    const std::string includeBasename = basename(fileName);
-    const std::string curFileName = SM.getFileEntryForID(SM.getFileID(HashLoc))->getName().str();
-    const std::string curBasename = basename(curFileName);
+  if (CurrentDirInProject.hasValue() && IncludeDirInProject.hasValue() &&
+      (CurrentDirInProject.getValue() == IncludeDirInProject.getValue())) {
+    GroupType = GroupType::SameDirectory;
 
-    const std::string curExt = ext(curBasename);
+    const std::string IncludeBasename = basename(FileNameStr);
+    LLVM_DEBUG(llvm::dbgs() << "\tincBasename:\t" << IncludeBasename << "\n");
+    const std::string CurFileName =
+        SM.getFileEntryForID(SM.getFileID(HashLoc))->getName().str();
+    LLVM_DEBUG(llvm::dbgs() << "\tcurFileName:\t" << CurFileName << "\n");
+    const std::string CurBasename = basename(CurFileName);
+    LLVM_DEBUG(llvm::dbgs() << "\tcurBaseName:\t" << CurBasename << "\n");
 
-    if ((curExt == ".cc" || curExt == ".c") && curBasename.substr(0, curBasename.find_last_of('.')) == includeBasename.substr(0, includeBasename.find_last_of('.'))) {
-      groupType = GroupType::RelatedHeader;
+    const std::string CurExt = ext(CurBasename);
+    LLVM_DEBUG(llvm::dbgs() << "\tcurExt:\t" << CurExt << "\n");
+
+    if ((CurExt == ".cc" || CurExt == ".c") &&
+        CurBasename.substr(0, CurBasename.find_last_of('.')) ==
+            IncludeBasename.substr(0, IncludeBasename.find_last_of('.'))) {
+      GroupType = GroupType::RelatedHeader;
+      LLVM_DEBUG(llvm::dbgs() << "Related Header\n");
     }
-
-  } else if (currentDir.substr(0, prefixSize) == includeDir.substr(0, prefixSize))  {
-    groupType = GroupType::SameProject;
+  } else if (CurrentDirInProject.hasValue() && IncludeDirInProject.hasValue() &&
+             (projectForPathInProject(CurrentDirInProject.getValue()) ==
+              projectForPathInProject(IncludeDirInProject.getValue()))) {
+    GroupType = GroupType::SameProject;
+    LLVM_DEBUG(llvm::dbgs() << "Same project\n");
   }
 
-  IncludeDirective ID = {HashLoc, FilenameRange, fileName, groupType, project};
+  IncludeDirective ID = {HashLoc, FilenameRange, FileNameStr, GroupType,
+                         Project};
 
   // Bucket the include directives by the id of the file they were declared in.
   IncludeDirectives[SM.getFileID(HashLoc)].push_back(std::move(ID));
 }
 
-void IncludeOrderPPCallbacks::printInverse(const IncludeDirective & what, const IncludeDirective & beforeWhat) {
-  Check.diag(what.Range.getBegin(), "<" + what.Filename + "> should be included before <" + beforeWhat.Filename + ">");
+void IncludeOrderPPCallbacks::printInverse(const IncludeDirective &what,
+                                           const IncludeDirective &beforeWhat) {
+  Check.diag(what.Range.getBegin(), "<" + what.Filename +
+                                        "> should be included before <" +
+                                        beforeWhat.Filename + ">");
 }
 
 void IncludeOrderPPCallbacks::EndOfMainFile() {
