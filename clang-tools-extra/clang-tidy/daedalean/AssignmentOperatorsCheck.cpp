@@ -36,13 +36,13 @@ void AssignmentOperatorsCheck::check(const MatchFinder::MatchResult &Result) {
   }
 
   if (!MatchedDecl->hasUserDeclaredCopyAssignment()) {
-    diag(MatchedDecl->getLocation(),
+    diag(MatchedDecl->getBeginLoc(),
          "Non-abstract class %0 must implement copy-assignment operator")
         << MatchedDecl;
   }
 
   if (!MatchedDecl->hasUserDeclaredMoveAssignment()) {
-    diag(MatchedDecl->getLocation(),
+    diag(MatchedDecl->getBeginLoc(),
          "Non-abstract class %0 must implement move-assignment operator")
         << MatchedDecl;
   }
