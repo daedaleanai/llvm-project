@@ -75,17 +75,18 @@ void UseNodiscardCheck::registerMatchers(MatchFinder *Finder) {
   // Lambdas are excluded because c++20 does not have a way to mark the.
   // operator() as nodiscard in lambdas, so there is no point in warning.
   Finder->addMatcher(
-      cxxMethodDecl(
-          allOf(isDefinitionOrInline(),
-                unless(anyOf(isLambda(), returns(voidType()), isNoReturn(),
-                             isOverloadedAssignmentOperator(),
-                             isOverloadedPreincrementOperator(),
-                             isOverloadedPredecrementOperator()))))
+      cxxMethodDecl(allOf(isDefinitionOrInline(),
+                          unless(anyOf(isLambda(), returns(voidType()),
+                                       isNoReturn(), cxxDeductionGuideDecl(),
+                                       isOverloadedAssignmentOperator(),
+                                       isOverloadedPreincrementOperator(),
+                                       isOverloadedPredecrementOperator()))))
           .bind("no_discard"),
       this);
   Finder->addMatcher(
       functionDecl(allOf(isNotMethod(), isDefinitionOrInline(),
-                         unless(anyOf(returns(voidType()), isNoReturn()))))
+                         unless(anyOf(returns(voidType()), isNoReturn(),
+                                      cxxDeductionGuideDecl()))))
           .bind("no_discard_func"),
       this);
 }
