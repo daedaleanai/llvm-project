@@ -352,3 +352,7 @@ template <typename T>
 [[nodiscard]] typename T::value f3(T &) noexcept;
 
 [[nodiscard]] bool f4();
+
+[[nodiscard]] bool callBuiltin() {
+  return __builtin_isinf(0.0) != 0;
+}
