@@ -25,9 +25,26 @@ namespace {
 AST_MATCHER(CXXMethodDecl, isOverloadedAssignmentOperator) {
   // Don't put ``[[nodiscard]]`` in front of assignment operators that return a
   // reference.
-  return Node.isOverloadedOperator() &&
-         (Node.getOverloadedOperator() == OverloadedOperatorKind::OO_Equal) &&
-         Node.getReturnType()->isReferenceType();
+  if (Node.isOverloadedOperator()) {
+    switch (Node.getOverloadedOperator()) {
+    case clang::OverloadedOperatorKind::OO_Equal:
+    case clang::OverloadedOperatorKind::OO_AmpEqual:
+    case clang::OverloadedOperatorKind::OO_CaretEqual:
+    case clang::OverloadedOperatorKind::OO_GreaterEqual:
+    case clang::OverloadedOperatorKind::OO_MinusEqual:
+    case clang::OverloadedOperatorKind::OO_PlusEqual:
+    case clang::OverloadedOperatorKind::OO_PercentEqual:
+    case clang::OverloadedOperatorKind::OO_PipeEqual:
+    case clang::OverloadedOperatorKind::OO_SlashEqual:
+    case clang::OverloadedOperatorKind::OO_StarEqual:
+    case clang::OverloadedOperatorKind::OO_GreaterGreaterEqual:
+    case clang::OverloadedOperatorKind::OO_LessLessEqual:
+      return Node.getReturnType()->isReferenceType();
+    default:
+      return false;
+    }
+  }
+  return false;
 }
 
 AST_MATCHER(CXXMethodDecl, isLambda) {
