@@ -29,6 +29,11 @@ QualType getPointee(QualType type) {
   assert(false && "Not a valid pointer type!");
 }
 
+bool hasPointerRepresentation(QualType type) {
+  return llvm::isa<PointerType>(type) || llvm::isa<ReferenceType>(type) ||
+         llvm::isa<BlockPointerType>(type);
+}
+
 bool onlyAddsQualifiers(QualType sourceType, QualType destType) {
   if ((sourceType.getQualifiers() != destType.getQualifiers()) &&
       !destType.isMoreQualifiedThan(sourceType)) {
@@ -36,9 +41,8 @@ bool onlyAddsQualifiers(QualType sourceType, QualType destType) {
     return false;
   }
 
-  if (sourceType->hasPointerRepresentation() &&
-      destType->hasPointerRepresentation() && !sourceType->isNullPtrType() &&
-      !destType->isNullPtrType()) {
+  if (hasPointerRepresentation(sourceType) &&
+      hasPointerRepresentation(destType)) {
     // Check if pointed types are same or more qualifiers
     const QualType pointedSourceType =
         getPointee(sourceType).getCanonicalType();
@@ -207,8 +211,27 @@ void TypeConversionsCheck::handleImplicitCast(clang::ASTContext *context,
     return;
   }
 
-  if (onlyAddsQualifiers(sourceType, destType)) {
+  if (onlyAddsQualifiers(sourceType.getUnqualifiedType(),
+                         destType.getUnqualifiedType())) {
     return;
+  }
+
+  if (sourceType->isNullPtrType() && destType->isPointerType()) {
+    // Casting from nullptr to a pointer type is always allowed
+    return;
+  }
+
+  if (sourceType->isPointerType() && destType->isVoidPointerType()) {
+    // Casting from pointer to void * is allowed
+    return;
+  }
+
+  if (sourceType->isBuiltinType()) {
+    const BuiltinType *Builtin = llvm::dyn_cast<BuiltinType>(sourceType);
+    if ((Builtin->getKind() == BuiltinType::Kind::BuiltinFn) &&
+        destType->isFunctionPointerType()) {
+      return;
+    }
   }
 
   if (sourceType->isDependentType() || destType->isDependentType()) {
