@@ -356,3 +356,18 @@ template <typename T>
 [[nodiscard]] bool callBuiltin() {
   return __builtin_isinf(0.0) != 0;
 }
+
+// Assignemnt operators
+class A {
+
+  A &operator=(const A &);
+  A &operator=(A &&);
+  A &operator+=(int);
+  A &operator-=(int);
+  A &operator*=(int);
+  A &operator/=(int);
+  A &operator<<=(int);
+  A &operator>>=(int);
+  A &operator|=(int);
+  A &operator^=(int);
+};
