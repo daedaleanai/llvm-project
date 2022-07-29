@@ -45,6 +45,10 @@ AST_MATCHER(FunctionDecl, isDefinitionOrInline) {
   return !(Node.isThisDeclarationADefinition() && Node.isOutOfLine());
 }
 
+AST_MATCHER(FunctionDecl, isBuiltinFunction) {
+  return Node.getBuiltinID() != 0;
+}
+
 AST_MATCHER(CXXMethodDecl, isOverloadedPredecrementOperator) {
   // Don't put ``[[nodiscard]]`` in front of predecrement operators that return
   // a reference.
@@ -80,13 +84,15 @@ void UseNodiscardCheck::registerMatchers(MatchFinder *Finder) {
                                        isNoReturn(), cxxDeductionGuideDecl(),
                                        isOverloadedAssignmentOperator(),
                                        isOverloadedPreincrementOperator(),
+                                       isBuiltinFunction(),
                                        isOverloadedPredecrementOperator()))))
           .bind("no_discard"),
       this);
   Finder->addMatcher(
-      functionDecl(allOf(isNotMethod(), isDefinitionOrInline(),
-                         unless(anyOf(returns(voidType()), isNoReturn(),
-                                      cxxDeductionGuideDecl()))))
+      functionDecl(
+          allOf(isNotMethod(), isDefinitionOrInline(),
+                unless(anyOf(returns(voidType()), isNoReturn(),
+                             isBuiltinFunction(), cxxDeductionGuideDecl()))))
           .bind("no_discard_func"),
       this);
 }
