@@ -1,0 +1,50 @@
+name: Clang Tools Tests
+
+on:
+  push:
+    branches:
+      - 'ddln*'
+    paths:
+      - 'clang-tools-extra/**'
+      - '.github/workflows/clang-tools-tests.yml'
+      - '.github/workflows/llvm-project-tests.yml'
+      - '!llvm/**'
+  pull_request:
+    paths:
+      - 'clang-tools-extra/**'
+      - '.github/workflows/clang-tools-tests.yml'
+      - '.github/workflows/llvm-project-tests.yml'
+      - '!llvm/**'
+
+concurrency:
+  # Skip intermediate builds: always.
+  # Cancel intermediate builds: only if it is a pull request build.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
+
+env:
+  # Workaround for build faliure on Mac OS X: llvm.org/PR46190, https://github.com/actions/virtual-environments/issues/2274
+  CPLUS_INCLUDE_PATH: /usr/local/opt/llvm/include/c++/v1:/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include
+
+jobs:
+  check_clang_tools:
+    name: Lit Tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          # Use a specific version of macOS to ensure the CPLUS_INCLUDE_PATH workaround works.
+          - macOS-10.15
+    steps:
+      - name: Install Ninja
+        uses: llvm/actions/install-ninja@main
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 250
+      - name: Build and Test
+        uses: llvm/actions/build-test-llvm-project@main
+        with:
+          cmake_args: '-GNinja -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra" -DCMAKE_BUILD_TYPE=Release -DLLDB_INCLUDE_TESTS=OFF'
+          build_target:  'check-clang-tools'
