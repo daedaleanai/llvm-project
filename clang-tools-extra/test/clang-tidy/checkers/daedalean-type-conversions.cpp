@@ -711,3 +711,25 @@ void pointerDecay() {
   const char *const constCharPtrConst = charArray;
   const volatile char *const volatile constVolatileCharPtrConstVolatile = charArray;
 }
+
+void takesVoidPtr(const void *);
+void callsTakesVoidPtr() {
+  const char *strLit = "";
+  char strArr[] = "";
+  // Implicit conversion from const char* to const void* is allowed
+  takesVoidPtr(strLit);
+
+  // Implicit conversion from char[] to const void* is allowed
+  takesVoidPtr(strArr);
+
+  // Implicit conversion from nullptr to const char* is allowed
+  if (strLit != nullptr) {
+    return;
+  }
+}
+
+double builtinFunctionCallImplicitConversionIgnored() {
+  // This call may trigger an implicit conversion: Implicit conversion from '<builtin fn type>' to 'double (*)() noexcept'
+  // But it should be ignored
+  return __builtin_huge_val();
+}
