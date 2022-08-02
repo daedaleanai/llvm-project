@@ -73,7 +73,9 @@ void testImplicitCastFromDerivedPtrToBase() {
 
   // Implicit B to A is fine
   A &NonConstA{Obj};
+  A *NonConstAPtr{&Obj};
   static_cast<void>(NonConstA);
+  static_cast<void>(NonConstAPtr);
 }
 
 void testImplicitCastAddingQualifiers() {

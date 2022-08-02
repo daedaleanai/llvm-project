@@ -27,6 +27,7 @@ QualType getPointee(QualType type) {
     return llvm::cast<BlockPointerType>(type)->getPointeeType();
   }
   assert(false && "Not a valid pointer type!");
+  return type;
 }
 
 bool hasPointerRepresentation(QualType type) {
@@ -216,7 +217,8 @@ void TypeConversionsCheck::handleImplicitCast(clang::ASTContext *context,
     return;
   }
 
-  if (sourceType->isNullPtrType() && destType->isPointerType()) {
+  if (sourceType->isNullPtrType() &&
+      (destType->isPointerType() || destType->isMemberPointerType())) {
     // Casting from nullptr to a pointer type is always allowed
     return;
   }
@@ -226,7 +228,7 @@ void TypeConversionsCheck::handleImplicitCast(clang::ASTContext *context,
     return;
   }
 
-  if (sourceType->isBuiltinType()) {
+  if (llvm::isa<BuiltinType>(sourceType)) {
     const BuiltinType *Builtin = llvm::dyn_cast<BuiltinType>(sourceType);
     if ((Builtin->getKind() == BuiltinType::Kind::BuiltinFn) &&
         destType->isFunctionPointerType()) {
@@ -263,6 +265,18 @@ void TypeConversionsCheck::handleImplicitCast(clang::ASTContext *context,
   if (sourceRecord && destRecord && sourceRecord->isDerivedFrom(destRecord)) {
     // Cast pointer or reference from child to base MAY be implicit.
     return;
+  }
+
+  if (hasPointerRepresentation(sourceType) &&
+      hasPointerRepresentation(destType)) {
+    const CXXRecordDecl *sourceRecord =
+        getPointee(sourceType)->getAsCXXRecordDecl();
+    const CXXRecordDecl *destRecord =
+        getPointee(destType)->getAsCXXRecordDecl();
+    if (sourceRecord && destRecord && sourceRecord->isDerivedFrom(destRecord)) {
+      // Cast pointer or reference from child to base MAY be implicit.
+      return;
+    }
   }
 
   diag(location, "Type conversions MUST be explicit");
