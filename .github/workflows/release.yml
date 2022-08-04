@@ -3,7 +3,7 @@ name: Build llvm release
 on:
   push:
     tags:
-      - 'ddln-llvm*'
+      - 'v*'
   pull_request:
     branches:
       - 'ddln*'
