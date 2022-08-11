@@ -17,7 +17,8 @@ namespace tidy {
 namespace daedalean {
 
 void AssignmentOperatorsCheck::registerMatchers(MatchFinder *Finder) {
-  Finder->addMatcher(cxxRecordDecl(hasDefinition()).bind("x"), this);
+  Finder->addMatcher(
+      cxxRecordDecl(hasDefinition(), unless(isUnion())).bind("x"), this);
 }
 
 void AssignmentOperatorsCheck::check(const MatchFinder::MatchResult &Result) {
