@@ -119,9 +119,13 @@ void MagicNumbersCheck::storeOptions(ClangTidyOptions::OptionMap &Opts) {
 }
 
 void MagicNumbersCheck::registerMatchers(MatchFinder *Finder) {
-  Finder->addMatcher(integerLiteral().bind("integer"), this);
+  Finder->addMatcher(traverse(TK_IgnoreUnlessSpelledInSource,
+                              integerLiteral().bind("integer")),
+                     this);
   if (!IgnoreAllFloatingPointValues)
-    Finder->addMatcher(floatLiteral().bind("float"), this);
+    Finder->addMatcher(
+        traverse(TK_IgnoreUnlessSpelledInSource, floatLiteral().bind("float")),
+        this);
 }
 
 void MagicNumbersCheck::check(const MatchFinder::MatchResult &Result) {
