@@ -207,7 +207,9 @@ void TypeConversionsCheck::handleImplicitCast(clang::ASTContext *context,
                                               QualType sourceType,
                                               QualType destType,
                                               SourceLocation location) {
-  if (destType.getCanonicalType() == sourceType.getCanonicalType()) {
+  sourceType = sourceType.getCanonicalType();
+  destType = destType.getCanonicalType();
+  if (destType == sourceType) {
     // If source and destination are the same type we can ignore the cast
     return;
   }
