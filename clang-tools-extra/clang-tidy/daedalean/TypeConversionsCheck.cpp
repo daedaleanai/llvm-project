@@ -243,15 +243,15 @@ void TypeConversionsCheck::handleImplicitCast(clang::ASTContext *context,
   }
 
   if (!canonicalSourceType->hasPointerRepresentation() &&
-      (canonicalSourceType.getUnqualifiedType().getCanonicalType() ==
-       canonicalDestType.getUnqualifiedType().getCanonicalType())) {
+      (canonicalSourceType.getUnqualifiedType() ==
+       canonicalDestType.getUnqualifiedType())) {
     // Removing qualifiers by value (not reference or pointer types) is ok
     return;
   }
 
   if (canonicalSourceType->canDecayToPointerType()) {
     const QualType decayedType = context->getDecayedType(canonicalSourceType);
-    if (decayedType.getCanonicalType() == canonicalDestType.getCanonicalType()) {
+    if (decayedType.getCanonicalType() == canonicalDestType) {
       return;
     }
   }
