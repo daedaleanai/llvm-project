@@ -207,72 +207,74 @@ void TypeConversionsCheck::handleImplicitCast(clang::ASTContext *context,
                                               QualType sourceType,
                                               QualType destType,
                                               SourceLocation location) {
-  if (destType.getCanonicalType() == sourceType.getCanonicalType()) {
+  const QualType canonicalSourceType = sourceType.getCanonicalType();
+  const QualType canonicalDestType = destType.getCanonicalType();
+  if (canonicalDestType == canonicalSourceType) {
     // If source and destination are the same type we can ignore the cast
     return;
   }
 
-  if (onlyAddsQualifiers(sourceType.getUnqualifiedType(),
-                         destType.getUnqualifiedType())) {
+  if (onlyAddsQualifiers(canonicalSourceType.getUnqualifiedType(),
+                         canonicalDestType.getUnqualifiedType())) {
     return;
   }
 
-  if (sourceType->isNullPtrType() &&
-      (destType->isPointerType() || destType->isMemberPointerType())) {
+  if (canonicalSourceType->isNullPtrType() &&
+      (canonicalDestType->isPointerType() || canonicalDestType->isMemberPointerType())) {
     // Casting from nullptr to a pointer type is always allowed
     return;
   }
 
-  if (sourceType->isPointerType() && destType->isVoidPointerType()) {
+  if (canonicalSourceType->isPointerType() && canonicalDestType->isVoidPointerType()) {
     // Casting from pointer to void * is allowed
     return;
   }
 
-  if (llvm::isa<BuiltinType>(sourceType)) {
-    const BuiltinType *Builtin = llvm::dyn_cast<BuiltinType>(sourceType);
+  if (llvm::isa<BuiltinType>(canonicalSourceType)) {
+    const BuiltinType *Builtin = llvm::dyn_cast<BuiltinType>(canonicalSourceType);
     if ((Builtin->getKind() == BuiltinType::Kind::BuiltinFn) &&
-        destType->isFunctionPointerType()) {
+        canonicalDestType->isFunctionPointerType()) {
       return;
     }
   }
 
-  if (sourceType->isDependentType() || destType->isDependentType()) {
+  if (canonicalSourceType->isDependentType() || canonicalDestType->isDependentType()) {
     return;
   }
 
-  if (!sourceType->hasPointerRepresentation() &&
-      (sourceType.getUnqualifiedType().getCanonicalType() ==
-       destType.getUnqualifiedType().getCanonicalType())) {
+  if (!canonicalSourceType->hasPointerRepresentation() &&
+      (canonicalSourceType.getUnqualifiedType() ==
+       canonicalDestType.getUnqualifiedType())) {
     // Removing qualifiers by value (not reference or pointer types) is ok
     return;
   }
 
-  if (sourceType->canDecayToPointerType()) {
-    const QualType decayedType = context->getDecayedType(sourceType);
-    if (decayedType.getCanonicalType() == destType.getCanonicalType()) {
+  if (canonicalSourceType->canDecayToPointerType()) {
+    const QualType decayedType = context->getDecayedType(canonicalSourceType);
+    if (decayedType.getCanonicalType() == canonicalDestType) {
       return;
     }
   }
 
-  if (isSafeIntegralCast(context, sourceType, destType)) {
+  if (isSafeIntegralCast(context, canonicalSourceType, canonicalDestType)) {
     // Integral promotion is allowed
     return;
   }
 
   // Check conversion from child to parent
-  const CXXRecordDecl *destRecord = destType->getAsCXXRecordDecl();
-  const CXXRecordDecl *sourceRecord = sourceType->getAsCXXRecordDecl();
+  const CXXRecordDecl *destRecord = canonicalDestType->getAsCXXRecordDecl();
+  const CXXRecordDecl *sourceRecord = canonicalSourceType->getAsCXXRecordDecl();
   if (sourceRecord && destRecord && sourceRecord->isDerivedFrom(destRecord)) {
     // Cast pointer or reference from child to base MAY be implicit.
     return;
   }
 
-  if (hasPointerRepresentation(sourceType) &&
-      hasPointerRepresentation(destType)) {
+  if (hasPointerRepresentation(canonicalSourceType) &&
+      hasPointerRepresentation(canonicalDestType)) {
     const CXXRecordDecl *sourceRecord =
-        getPointee(sourceType)->getAsCXXRecordDecl();
+        getPointee(canonicalSourceType)->getAsCXXRecordDecl();
     const CXXRecordDecl *destRecord =
-        getPointee(destType)->getAsCXXRecordDecl();
+        getPointee(canonicalDestType)->getAsCXXRecordDecl();
     if (sourceRecord && destRecord && sourceRecord->isDerivedFrom(destRecord)) {
       // Cast pointer or reference from child to base MAY be implicit.
       return;

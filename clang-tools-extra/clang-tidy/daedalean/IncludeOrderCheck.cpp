@@ -161,11 +161,15 @@ void IncludeOrderPPCallbacks::InclusionDirective(
     LLVM_DEBUG(llvm::dbgs() << "Invalid extension\n");
   }
 
+  const auto FileEntry = SM.getFileEntryForID(SM.getFileID(HashLoc));
+
+  if (!FileEntry) {
+    // This is not regular file
+    return;
+  }
+
   const std::string CurrentDir =
-      SM.getFileManager()
-          .getCanonicalName(
-              SM.getFileEntryForID(SM.getFileID(HashLoc))->getDir())
-          .str();
+      SM.getFileManager().getCanonicalName(FileEntry->getDir()).str();
   LLVM_DEBUG(llvm::dbgs() << "\tpwd:\t" << CurrentDir << "\n");
 
   const std::string IncludeDir =
