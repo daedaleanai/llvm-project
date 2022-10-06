@@ -265,6 +265,12 @@ New checks
   Looks for local methods and types that should be part of an anonymous
   namespace and warns the user.
 
+- New :doc:`daedalean-strings
+  <clang-tidy/checks/daedalean-strings>` check.
+
+  Checks for usages of C-style string literals and warns on them.
+  User-defined literals are excluded from this checker.
+
 - New :doc:`daedalean-template-specializations
   <clang-tidy/checks/daedalean-template-specializations>` check.
 
