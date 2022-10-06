@@ -24,6 +24,7 @@
 #include "OperatorOverloadingCheck.h"
 #include "PreprocessingDirectivesCheck.h"
 #include "ProtectedMustNotBeUsedCheck.h"
+#include "StringsCheck.h"
 #include "StructsAndClassesCheck.h"
 #include "SwitchStatementCheck.h"
 #include "TemplateSpecializationsCheck.h"
@@ -56,6 +57,8 @@ public:
         "daedalean-derived-classes");
     CheckFactories.registerCheck<LocalMethodsAndTypesCheck>(
         "daedalean-local-methods-and-types");
+    CheckFactories.registerCheck<StringsCheck>(
+        "daedalean-strings");
     CheckFactories.registerCheck<TemplateSpecializationsCheck>(
         "daedalean-template-specializations");
     CheckFactories.registerCheck<TypeConversionsCheck>(

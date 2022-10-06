@@ -185,15 +185,16 @@ Clang-Tidy Checks
    `daedalean-operator-overloading <daedalean-operator-overloading.html>`_,
    `daedalean-preprocessing-directives <daedalean-preprocessing-directives.html>`_,
    `daedalean-protected-must-not-be-used <daedalean-protected-must-not-be-used.html>`_,
+   `daedalean-strings <daedalean-strings.html>`_, "Yes"
    `daedalean-structs-and-classes <daedalean-structs-and-classes.html>`_, "Yes"
    `daedalean-switch-statement <daedalean-switch-statement.html>`_,
-   `daedalean-template-specializations <daedalean-template-specializations.html>`_, "Yes"
+   `daedalean-template-specializations <daedalean-template-specializations.html>`_,
    `daedalean-ternary-operator-must-not-be-used <daedalean-ternary-operator-must-not-be-used.html>`_,
    `daedalean-type-conversions <daedalean-type-conversions.html>`_,
    `daedalean-unions-must-not-be-used <daedalean-unions-must-not-be-used.html>`_,
+   `daedalean-use-nodiscard <daedalean-use-nodiscard.html>`_, "Yes"
    `daedalean-use-noexcept <daedalean-use-noexcept.html>`_,
    `daedalean-vararg-functions-must-not-be-used <daedalean-vararg-functions-must-not-be-used.html>`_,
-   `daedalean-use-nodiscard <daedalean-use-nodiscard.html>`_, "Yes"
    `darwin-avoid-spinlock <darwin-avoid-spinlock.html>`_,
    `darwin-dispatch-once-nonstatic <darwin-dispatch-once-nonstatic.html>`_, "Yes"
    `fuchsia-default-arguments-calls <fuchsia-default-arguments-calls.html>`_,
@@ -353,6 +354,7 @@ Clang-Tidy Checks
    `readability-uppercase-literal-suffix <readability-uppercase-literal-suffix.html>`_, "Yes"
    `readability-use-anyofallof <readability-use-anyofallof.html>`_,
    `zircon-temporary-objects <zircon-temporary-objects.html>`_,
+
 
 .. csv-table:: Aliases..
    :header: "Name", "Redirect", "Offers fixes"
