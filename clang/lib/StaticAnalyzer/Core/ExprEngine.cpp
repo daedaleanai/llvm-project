@@ -2993,7 +2993,13 @@ void ExprEngine::evalLoad(ExplodedNodeSet &Dst,
       if (LoadTy.isNull())
         LoadTy = BoundEx->getType();
       V = state->getSVal(location.castAs<Loc>(), LoadTy);
+
+      if (auto * cast = llvm::dyn_cast<CastExpr>(NodeEx); cast && cast->getCastKind() == CK_LValueToRValueBitCast) {
+        V = svalBuilder.evalCast(V, cast->getType(), cast->getSubExpr()->getType());
+      }
     }
+
+
 
     Bldr.generateNode(NodeEx, I, state->BindExpr(BoundEx, LCtx, V), tag,
                       ProgramPoint::PostLoadKind);
