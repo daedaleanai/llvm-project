@@ -2996,7 +2996,7 @@ void ExprEngine::evalLoad(ExplodedNodeSet &Dst,
 
       auto * Cast = llvm::dyn_cast<CastExpr>(NodeEx);
       if (Cast && Cast->getCastKind() == CK_LValueToRValueBitCast) {
-        V = svalBuilder.evalCast(V, cast->getType(), cast->getSubExpr()->getType());
+        V = svalBuilder.evalCast(V, Cast->getType(), Cast->getSubExpr()->getType());
       }
     }
 
