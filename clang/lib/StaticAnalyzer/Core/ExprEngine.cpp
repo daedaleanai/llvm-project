@@ -2994,7 +2994,8 @@ void ExprEngine::evalLoad(ExplodedNodeSet &Dst,
         LoadTy = BoundEx->getType();
       V = state->getSVal(location.castAs<Loc>(), LoadTy);
 
-      if (auto * cast = llvm::dyn_cast<CastExpr>(NodeEx); cast && cast->getCastKind() == CK_LValueToRValueBitCast) {
+      auto * Cast = llvm::dyn_cast<CastExpr>(NodeEx);
+      if (Cast && Cast->getCastKind() == CK_LValueToRValueBitCast) {
         V = svalBuilder.evalCast(V, cast->getType(), cast->getSubExpr()->getType());
       }
     }
