@@ -17,14 +17,37 @@ namespace tidy {
 namespace daedalean {
 
 void StringsCheck::registerMatchers(MatchFinder *Finder) {
-  Finder->addMatcher(stringLiteral(unless(hasParent(userDefinedLiteral())))
-                         .bind("string-literal"),
-                     this);
+  Finder->addMatcher(
+      traverse(TK_IgnoreUnlessSpelledInSource,
+               stringLiteral(unless(anyOf(hasParent(userDefinedLiteral()),
+                                          hasParent(staticAssertDecl()))))
+                   .bind("string-literal")),
+      this);
 }
 
 void StringsCheck::check(const MatchFinder::MatchResult &Result) {
   const StringLiteral *StringLiteralDecl =
       Result.Nodes.getNodeAs<StringLiteral>("string-literal");
+
+  auto parents = Result.Context->getParents(*StringLiteralDecl);
+
+  if (parents.size() == 1) {
+    if (const auto *callExpr = parents[0].get<CallExpr>()) {
+      if (auto *cast =
+              llvm::dyn_cast<const ImplicitCastExpr>(callExpr->getCallee())) {
+        if (auto *decl =
+                llvm::dyn_cast<const DeclRefExpr>(cast->getSubExpr())) {
+          if (auto *func =
+                  llvm::dyn_cast<const FunctionDecl>(decl->getDecl())) {
+            if (auto *lit = func->getLiteralIdentifier()) {
+              return;
+            }
+          }
+        }
+      }
+    }
+  }
+
   diag(StringLiteralDecl->getExprLoc(), "C-String literals MUST not be used");
 }
 
