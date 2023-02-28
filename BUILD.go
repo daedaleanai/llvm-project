@@ -1,6 +1,6 @@
 package llvm
 
-var CLang = in("bin/clang")
+var Clang = in("bin/clang")
 var ClangPp = in("bin/clang++")
 var Ld = in("bin/ld.lld")
 var Ar = in("bin/llvm-ar")
@@ -11,7 +11,7 @@ var ClangTidy = in("bin/clang-tidy")
 var ClangFormat = in("bin/clang-format")
 var Cov = in("bin/llvm-cov")
 
-var CLangLibs = ins(
+var ClangLibs = ins(
 	"lib/libclangFrontend.a",
 	"lib/libclang.so",
 	"lib/libclangDriver.a",
